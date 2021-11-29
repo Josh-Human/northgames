@@ -1,4 +1,6 @@
 const db = require("../connection.js");
+const format = require("pg-format");
+const { formatData } = require("../utils/utils.js");
 
 exports.dropTables = () => {
   return db
@@ -54,5 +56,22 @@ exports.createTables = () => {
           owner VARCHAR(50) REFERENCES users(username),
           created_at DATE NOT NULL
         );`);
+    });
+};
+
+exports.insertData = (data) => {
+  const { categoryData, commentData, reviewData, userData } = data;
+  const formattedCategoryData = formatData(categoryData);
+  return db
+    .query(
+      format(
+        `INSERT INTO categories(slug, description)
+  VALUES %L
+  RETURNING *;`,
+        formattedCategoryData
+      )
+    )
+    .then((result) => {
+      console.log(result.rows);
     });
 };
