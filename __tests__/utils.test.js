@@ -5,7 +5,7 @@ const {
     formatCommentData,
 } = require("../db/utils/utils.js");
 
-describe.only("formatCategoryData()", () => {
+describe("formatCategoryData()", () => {
     it("return is an array of arrays", () => {
         const input = [{ slug: "Check", description: "A real description" }];
         expect(formatCategoryData(input)).toBeInstanceOf(Array);
@@ -38,24 +38,73 @@ describe.only("formatCategoryData()", () => {
         ]);
     });
 });
+
 describe("formatUserData()", () => {
-    it("return is an array of arrays", () => {});
-    it("return is an array of arrays", () => {});
-    it("input is not mutated", () => {});
-    it("result and input different reference", () => {});
-    it("returns result for array with multiple objects", () => {});
-});
-describe("formatReviewData()", () => {
-    it("return is an array of arrays", () => {});
-    it("return is an array of arrays", () => {});
-    it("input is not mutated", () => {});
-    it("result and input different reference", () => {});
-    it("returns result for array with multiple objects", () => {});
-});
-describe("formatCommentData()", () => {
-    it("return is an array of arrays", () => {});
-    it("return is an array of arrays", () => {});
-    it("input is not mutated", () => {});
-    it("result and input different reference", () => {});
-    it("returns result for array with multiple objects", () => {});
+    it("return is an array of arrays", () => {
+        const input = [
+            {
+                username: "annie901",
+                avatar_url: "https:www.google.com",
+                name: "James",
+            },
+        ];
+        expect(formatUserData(input)).toBeInstanceOf(Array);
+        expect(formatUserData(input)[0]).toBeInstanceOf(Array);
+    });
+    it("return has correct data", () => {
+        const input = [
+            {
+                username: "annie901",
+                avatar_url: "https:www.google.com",
+                name: "James",
+            },
+        ];
+        expect(formatUserData(input)).toEqual([
+            ["annie901", "https:www.google.com", "James"],
+        ]);
+    });
+    it("input is not mutated", () => {
+        const input = [
+            {
+                username: "annie901",
+                avatar_url: "https:www.google.com",
+                name: "James",
+            },
+        ];
+        expect(input).toEqual([
+            {
+                username: "annie901",
+                avatar_url: "https:www.google.com",
+                name: "James",
+            },
+        ]);
+    });
+    it("result and input different reference", () => {
+        const input = [
+            {
+                username: "annie901",
+                avatar_url: "https:www.google.com",
+                name: "James",
+            },
+        ];
+        expect(formatUserData(input)).not.toBe(input);
+    });
+    it("returns result for array with multiple objects", () => {
+        const input = [
+            {
+                username: "annie901",
+                avatar_url: "https:www.google.com",
+                name: "James",
+            },
+            {
+                username: "karlx",
+                avatar_url: "https:www.imdb.com",
+                name: "Karl",
+            },
+        ];
+        expect(formatUserData(input)).toEqual([
+            ["annie901", "https:www.google.com", "James"],
+            ["karlx", "https:www.imdb.com", "Karl"],
+        ]);
+    });
 });
