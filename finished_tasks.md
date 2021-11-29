@@ -15,3 +15,4 @@
 ---
 
 -   General purpose data formatter.
+-   Tested

@@ -50,8 +50,6 @@ exports.createTables = () => {
         );`);
         })
         .then(() => {
-            console.log("Test");
-
             return db.query(`CREATE TABLE comments (
           comment_id SERIAL PRIMARY KEY,
           author VARCHAR(150) REFERENCES users(username),
