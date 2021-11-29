@@ -108,3 +108,135 @@ describe("formatUserData()", () => {
         ]);
     });
 });
+
+describe("formatReviewData()", () => {
+    it("return is an array of arrays", () => {
+        const input = [
+            {
+                title: "Hello",
+                review_body: "Review",
+                designer: "Design",
+                review_img_url: "a link",
+                votes: 5,
+                category: 1,
+                owner: 3,
+                created_at: new Date(10),
+            },
+        ];
+        expect(formatReviewData(input)).toBeInstanceOf(Array);
+        expect(formatReviewData(input)[0]).toBeInstanceOf(Array);
+    });
+    it("return has correct data", () => {
+        const input = [
+            {
+                title: "Hello",
+                review_body: "Review",
+                designer: "Design",
+                review_img_url: "a link",
+                votes: 5,
+                category: 1,
+                owner: 3,
+                created_at: new Date(10).toString(),
+            },
+        ];
+        expect(formatReviewData(input)).toEqual([
+            [
+                "Hello",
+                "Review",
+                "Design",
+                "a link",
+                5,
+                1,
+                3,
+                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
+            ],
+        ]);
+    });
+    it("input is not mutated", () => {
+        const input = [
+            {
+                title: "Hello",
+                review_body: "Review",
+                designer: "Design",
+                review_img_url: "a link",
+                votes: 5,
+                category: 1,
+                owner: 3,
+                created_at: new Date(10),
+            },
+        ];
+        expect(input).toEqual([
+            {
+                title: "Hello",
+                review_body: "Review",
+                designer: "Design",
+                review_img_url: "a link",
+                votes: 5,
+                category: 1,
+                owner: 3,
+                created_at: new Date(10),
+            },
+        ]);
+    });
+    it("result and input different reference", () => {
+        const input = [
+            {
+                title: "Hello",
+                review_body: "Review",
+                designer: "Design",
+                review_img_url: "a link",
+                votes: 5,
+                category: 1,
+                owner: 3,
+                created_at: new Date(10),
+            },
+        ];
+        expect(formatReviewData(input)).not.toBe(input);
+    });
+    it("returns result for array with multiple objects", () => {
+        const input = [
+            {
+                title: "Hello",
+                review_body: "Review",
+                designer: "Design",
+                review_img_url: "a link",
+                votes: 5,
+                category: 1,
+                owner: 3,
+                created_at: new Date(15).toString(),
+            },
+            {
+                title: "Hello1",
+                review_body: "Review1",
+                designer: "Design1",
+                review_img_url: "a link1",
+                votes: 7,
+                category: 2,
+                owner: 4,
+                created_at: new Date(15).toString(),
+            },
+        ];
+        expect(formatReviewData(input)).toEqual([
+            [
+                "Hello",
+                "Review",
+                "Design",
+                "a link",
+                5,
+                1,
+                3,
+                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
+            ],
+            [
+                "Hello1",
+                "Review1",
+                "Design1",
+                "a link1",
+                7,
+                2,
+                4,
+                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
+            ],
+        ]);
+    });
+});
