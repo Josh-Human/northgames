@@ -113,14 +113,11 @@ describe("formatReviewData()", () => {
     it("return is an array of arrays", () => {
         const input = [
             {
-                title: "Hello",
-                review_body: "Review",
-                designer: "Design",
-                review_img_url: "a link",
-                votes: 5,
-                category: 1,
-                owner: 3,
-                created_at: new Date(10),
+                author: "Someone",
+                review_id: 1,
+                votes: 0,
+                created_at: new Date(10).toString(),
+                body: "A body",
             },
         ];
         expect(formatReviewData(input)).toBeInstanceOf(Array);
@@ -236,6 +233,108 @@ describe("formatReviewData()", () => {
                 2,
                 4,
                 "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
+            ],
+        ]);
+    });
+});
+
+describe("formatCommentData()", () => {
+    it("return is an array of arrays", () => {
+        const input = [
+            {
+                author: "Someone",
+                review_id: 1,
+                votes: 0,
+                created_at: new Date(10).toString(),
+                body: "A body",
+            },
+        ];
+        expect(formatCommentData(input)).toBeInstanceOf(Array);
+        expect(formatCommentData(input)[0]).toBeInstanceOf(Array);
+    });
+    it("return has correct data", () => {
+        const input = [
+            {
+                author: "Someone",
+                review_id: 1,
+                votes: 0,
+                created_at: new Date(10).toString(),
+                body: "A body",
+            },
+        ];
+        expect(formatCommentData(input)).toEqual([
+            [
+                "Someone",
+                1,
+                0,
+                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
+                "A body",
+            ],
+        ]);
+    });
+    it("input is not mutated", () => {
+        const input = [
+            {
+                author: "Someone",
+                review_id: 1,
+                votes: 0,
+                created_at: new Date(10).toString(),
+                body: "A body",
+            },
+        ];
+        expect(input).toEqual([
+            {
+                author: "Someone",
+                review_id: 1,
+                votes: 0,
+                created_at: new Date(10).toString(),
+                body: "A body",
+            },
+        ]);
+    });
+    it("result and input different reference", () => {
+        const input = [
+            {
+                author: "Someone",
+                review_id: 1,
+                votes: 0,
+                created_at: new Date(10).toString(),
+                body: "A body",
+            },
+        ];
+        expect(formatCommentData(input)).not.toBe(input);
+    });
+    it("returns result for array with multiple objects", () => {
+        const input = [
+            {
+                author: "Someone",
+                review_id: 1,
+                votes: 0,
+                created_at: new Date(10).toString(),
+                body: "A body",
+            },
+            {
+                author: "Someone1",
+                review_id: 2,
+                votes: 1,
+                created_at: new Date(10).toString(),
+                body: "A body1",
+            },
+        ];
+        expect(formatCommentData(input)).toEqual([
+            [
+                "Someone",
+                1,
+                0,
+                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
+                "A body",
+            ],
+            [
+                "Someone1",
+                2,
+                1,
+                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
+                "A body1",
             ],
         ]);
     });
