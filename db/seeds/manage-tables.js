@@ -46,7 +46,7 @@ exports.createTables = () => {
           votes INT DEFAULT 0,
           category VARCHAR(150) REFERENCES categories(slug),
           owner VARCHAR(150) REFERENCES users(username),
-          created_at DATE NOT NULL
+          created_at TIMESTAMP NOT NULL
         );`);
         })
         .then(() => {
@@ -55,7 +55,7 @@ exports.createTables = () => {
           author VARCHAR(150) REFERENCES users(username),
           review_id INT REFERENCES reviews(review_id) NOT NULL,
           votes INT DEFAULT 0,
-          created_at DATE NOT NULL,
+          created_at TIMESTAMP NOT NULL,
           body TEXT NOT NULL
         );`);
         });
