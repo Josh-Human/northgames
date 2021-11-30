@@ -81,7 +81,7 @@ exports.selectReviews = (sort_by = "created_at") => {
             FROM REVIEWS
             FULL OUTER JOIN comments ON reviews.review_id = comments.review_id
             GROUP BY reviews.review_id
-            ORDER BY reviews.%I;`,
+            ORDER BY reviews.%I DESC;`,
                 sort_by
             )
         )

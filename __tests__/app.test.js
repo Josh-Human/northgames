@@ -188,14 +188,17 @@ describe("GET /api/reviews", () => {
                 });
             });
     });
-    it.only("200: default to sort by date", () => {
+    it.only("200: default to sort by date in descending order", () => {
         return request(app)
             .get("/api/reviews")
             .expect(200)
             .then((response) => {
                 expect(response.body.reviews).toBeInstanceOf(Array);
                 expect(response.body.reviews.length).toBe(13);
-                expect(response.body.reviews).toBeSorted({ key: "created_at" });
+                expect(response.body.reviews).toBeSorted({
+                    key: "created_at",
+                    descending: true,
+                });
             });
     });
     it.only("200: sort by other columns", () => {
@@ -205,10 +208,13 @@ describe("GET /api/reviews", () => {
             .then((response) => {
                 expect(response.body.reviews).toBeInstanceOf(Array);
                 expect(response.body.reviews.length).toBe(13);
-                expect(response.body.reviews).toBeSorted({ key: "designer" });
+                expect(response.body.reviews).toBeSorted({
+                    key: "designer",
+                    descending: true,
+                });
             });
     });
-    it("200: default order by descending", () => {});
+
     it("200: sort by ascending", () => {});
     it("200: can sort by category", () => {});
 });
