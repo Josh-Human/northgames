@@ -1,6 +1,7 @@
 const {
     selectReviewById,
     updateReviewById,
+    selectReviews,
 } = require("../models/reviews.model");
 const { checkIfColumnExists } = require("../models/utils.model");
 
@@ -33,4 +34,8 @@ exports.patchReviewById = (req, res, next) => {
     }
 };
 
-exports.getReviews = (req, res, next) => {};
+exports.getReviews = (req, res, next) => {
+    selectReviews().then((reviews) => {
+        res.status(200).send({ reviews });
+    });
+};

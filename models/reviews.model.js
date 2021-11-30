@@ -71,4 +71,24 @@ exports.updateReviewById = (review_id, inc_votes) => {
         });
 };
 
-exports.selectReviews = () => {};
+exports.selectReviews = () => {
+    return db
+        .query(
+            `SELECT reviews.review_id, title, review_body, designer, 
+            review_img_url, reviews.votes, category, owner, reviews.created_at,
+            COUNT(comments.comment_id) AS comment_count
+            FROM REVIEWS
+            FULL OUTER JOIN comments ON reviews.review_id = comments.review_id
+            GROUP BY reviews.review_id
+            ORDER BY reviews.created_at;`
+        )
+        .then(({ rows }) => {
+            const returnArray = [];
+            rows.forEach((review) => {
+                review.comment_count = parseInt(review.comment_count);
+                returnArray.push(review);
+            });
+            console.log(returnArray);
+            return returnArray;
+        });
+};

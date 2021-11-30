@@ -163,3 +163,43 @@ describe("PATCH /api/reviews/:review_id", () => {
             });
     });
 });
+
+describe("GET /api/reviews", () => {
+    it("200: returns review objects for reviewed game", () => {
+        return request(app)
+            .get("/api/reviews")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.reviews).toBeInstanceOf(Array);
+                expect(response.body.reviews.length).toBe(13);
+                response.body.reviews.forEach((review) => {
+                    expect(review).toEqual(
+                        expect.objectContaining({
+                            owner: expect.any(String),
+                            title: expect.any(String),
+                            review_id: expect.any(Number),
+                            category: expect.any(String),
+                            review_img_url: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number),
+                            comment_count: expect.any(Number),
+                        })
+                    );
+                });
+            });
+    });
+    it.only("200: default to sort by date", () => {
+        return request(app)
+            .get("/api/reviews")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.reviews).toBeInstanceOf(Array);
+                expect(response.body.reviews.length).toBe(13);
+                expect(response.body.reviews).toBeSorted({ key: "created_at" });
+            });
+    });
+    it("200: sort by other columns", () => {});
+    it("200: default order by descending", () => {});
+    it("200: sort by ascending", () => {});
+    it("200: can sort by category", () => {});
+});
