@@ -71,7 +71,7 @@ exports.updateReviewById = (review_id, inc_votes) => {
         });
 };
 
-exports.selectReviews = (sort_by = "created_at") => {
+exports.selectReviews = (sort_by = "created_at", order = "DESC") => {
     return db
         .query(
             format(
@@ -81,8 +81,9 @@ exports.selectReviews = (sort_by = "created_at") => {
             FROM REVIEWS
             FULL OUTER JOIN comments ON reviews.review_id = comments.review_id
             GROUP BY reviews.review_id
-            ORDER BY reviews.%I DESC;`,
-                sort_by
+            ORDER BY reviews.%I %s;`,
+                sort_by,
+                order.toUpperCase()
             )
         )
         .then(({ rows }) => {

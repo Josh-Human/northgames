@@ -165,7 +165,7 @@ describe("PATCH /api/reviews/:review_id", () => {
 });
 
 describe("GET /api/reviews", () => {
-    it("200: returns review objects for reviewed game", () => {
+    it.only("200: returns review objects for reviewed game", () => {
         return request(app)
             .get("/api/reviews")
             .expect(200)
@@ -215,6 +215,40 @@ describe("GET /api/reviews", () => {
             });
     });
 
-    it("200: sort by ascending", () => {});
-    it("200: can sort by category", () => {});
+    it.only("200: sort by ascending", () => {
+        return request(app)
+            .get("/api/reviews?order=asc")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.reviews).toBeInstanceOf(Array);
+                expect(response.body.reviews.length).toBe(13);
+                expect(response.body.reviews).toBeSorted({
+                    key: "created_at",
+                    ascending: true,
+                });
+            });
+    });
+    it.only("200: can sort by category", () => {
+        return request(app)
+            .get("/api/reviews?category=social deduction")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.reviews).toBeInstanceOf(Array);
+                expect(response.body.reviews.length).toBe(13);
+                response.body.reviews.forEach((review) => {
+                    expect(review).toEqual(
+                        expect.objectContaining({
+                            owner: expect.any(String),
+                            title: expect.any(String),
+                            review_id: expect.any(Number),
+                            category: "social deduction",
+                            review_img_url: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number),
+                            comment_count: expect.any(Number),
+                        })
+                    );
+                });
+            });
+    });
 });
