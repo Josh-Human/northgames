@@ -70,3 +70,5 @@ exports.updateReviewById = (review_id, inc_votes) => {
             return result.rows;
         });
 };
+
+exports.selectReviews = () => {};

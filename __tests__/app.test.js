@@ -153,4 +153,13 @@ describe("PATCH /api/reviews/:review_id", () => {
                 expect(response.body.msg).toBe("Invalid input");
             });
     });
+    it("400: returns bad request when object with correct and invalid key sent", () => {
+        return request(app)
+            .patch("/api/reviews/2")
+            .send({ inc_votes: 1, name: "Mitch" })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid input");
+            });
+    });
 });

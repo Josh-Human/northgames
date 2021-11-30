@@ -19,7 +19,8 @@ exports.patchReviewById = (req, res, next) => {
     const key = keys[0];
     if (
         (keys.length !== 0 && key !== "inc_votes") ||
-        (typeof req.body[key] !== "number" && keys.length !== 0)
+        (typeof req.body[key] !== "number" && keys.length !== 0) ||
+        keys.length > 1
     ) {
         res.status(400).send({ msg: "Invalid input" });
     } else {
@@ -31,3 +32,5 @@ exports.patchReviewById = (req, res, next) => {
             .catch(next);
     }
 };
+
+exports.getReviews = (req, res, next) => {};
