@@ -198,7 +198,16 @@ describe("GET /api/reviews", () => {
                 expect(response.body.reviews).toBeSorted({ key: "created_at" });
             });
     });
-    it("200: sort by other columns", () => {});
+    it.only("200: sort by other columns", () => {
+        return request(app)
+            .get("/api/reviews?sort_by=designer")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.reviews).toBeInstanceOf(Array);
+                expect(response.body.reviews.length).toBe(13);
+                expect(response.body.reviews).toBeSorted({ key: "designer" });
+            });
+    });
     it("200: default order by descending", () => {});
     it("200: sort by ascending", () => {});
     it("200: can sort by category", () => {});

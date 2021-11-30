@@ -1,6 +1,6 @@
 const db = require("../db/connection.js");
 const reviewRouter = require("../routers/reviews.router.js");
-
+const format = require("pg-format");
 // use count in select and join
 // use alias for lines 28-30 top rename the count to be comment_count
 
@@ -71,16 +71,19 @@ exports.updateReviewById = (review_id, inc_votes) => {
         });
 };
 
-exports.selectReviews = () => {
+exports.selectReviews = (sort_by = "created_at") => {
     return db
         .query(
-            `SELECT reviews.review_id, title, review_body, designer, 
+            format(
+                `SELECT reviews.review_id, title, review_body, designer, 
             review_img_url, reviews.votes, category, owner, reviews.created_at,
             COUNT(comments.comment_id) AS comment_count
             FROM REVIEWS
             FULL OUTER JOIN comments ON reviews.review_id = comments.review_id
             GROUP BY reviews.review_id
-            ORDER BY reviews.created_at;`
+            ORDER BY reviews.%I;`,
+                sort_by
+            )
         )
         .then(({ rows }) => {
             const returnArray = [];
@@ -88,7 +91,6 @@ exports.selectReviews = () => {
                 review.comment_count = parseInt(review.comment_count);
                 returnArray.push(review);
             });
-            console.log(returnArray);
             return returnArray;
         });
 };
