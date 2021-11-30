@@ -71,7 +71,11 @@ exports.updateReviewById = (review_id, inc_votes) => {
         });
 };
 
-exports.selectReviews = (sort_by = "created_at", order = "DESC") => {
+exports.selectReviews = (
+    sort_by = "created_at",
+    order = "DESC",
+    category = "true"
+) => {
     return db
         .query(
             format(
@@ -80,8 +84,10 @@ exports.selectReviews = (sort_by = "created_at", order = "DESC") => {
             COUNT(comments.comment_id) AS comment_count
             FROM REVIEWS
             FULL OUTER JOIN comments ON reviews.review_id = comments.review_id
+            WHERE %s
             GROUP BY reviews.review_id
             ORDER BY reviews.%I %s;`,
+                category,
                 sort_by,
                 order.toUpperCase()
             )

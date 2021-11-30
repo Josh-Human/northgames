@@ -230,18 +230,18 @@ describe("GET /api/reviews", () => {
     });
     it.only("200: can sort by category", () => {
         return request(app)
-            .get("/api/reviews?category=social deduction")
+            .get("/api/reviews?category=dexterity")
             .expect(200)
             .then((response) => {
                 expect(response.body.reviews).toBeInstanceOf(Array);
-                expect(response.body.reviews.length).toBe(13);
+                expect(response.body.reviews.length).toBe(1);
                 response.body.reviews.forEach((review) => {
                     expect(review).toEqual(
                         expect.objectContaining({
                             owner: expect.any(String),
                             title: expect.any(String),
                             review_id: expect.any(Number),
-                            category: "social deduction",
+                            category: "dexterity",
                             review_img_url: expect.any(String),
                             created_at: expect.any(String),
                             votes: expect.any(Number),
