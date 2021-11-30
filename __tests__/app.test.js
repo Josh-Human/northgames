@@ -26,7 +26,7 @@ describe("GET /api/categories", () => {
     });
 });
 describe("GET /api/reviews/:review_id", () => {
-    it("200: returns review", () => {
+    it("200: returns review object for reviewed game", () => {
         return request(app)
             .get("/api/reviews/2")
             .expect(200)
@@ -53,6 +53,101 @@ describe("GET /api/reviews/:review_id", () => {
     it("400: returns bad request when invalid param sent", () => {
         return request(app)
             .get("/api/reviews/dog")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid input");
+            });
+    });
+    it("404: returns no content when id out of range is sent", () => {
+        return request(app)
+            .get("/api/reviews/10000")
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("Value does not exist");
+            });
+    });
+});
+
+describe("PATCH /api/reviews/:review_id", () => {
+    it("200: returns review object for reviewed game", () => {
+        return request(app)
+            .patch("/api/reviews/2")
+            .send({ inc_votes: 5 })
+            .expect(200)
+            .then((response) => {
+                expect(response.body.review).toBeInstanceOf(Array);
+                expect(response.body.review.length).toBe(1);
+                expect(response.body.review).toEqual([
+                    {
+                        owner: "philippaclaire9",
+                        title: "Jenga",
+                        review_id: 2,
+                        review_body: "Fiddly fun for all the family",
+                        designer: "Leslie Scott",
+                        review_img_url:
+                            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+                        category: "dexterity",
+                        created_at: new Date(1610964101251).toISOString(),
+                        votes: 10,
+                    },
+                ]);
+            });
+    });
+    it("400: returns bad request when invalid param sent", () => {
+        return request(app)
+            .patch("/api/reviews/dog")
+            .send({ inc_votes: 5 })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid input");
+            });
+    });
+    it("404: returns no content when id out of range is sent", () => {
+        return request(app)
+            .patch("/api/reviews/10000")
+            .send({ inc_votes: 5 })
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("Value does not exist");
+            });
+    });
+    it("200: returns unedited review when empty object sent", () => {
+        return request(app)
+            .patch("/api/reviews/2")
+            .send({})
+            .expect(200)
+            .then((response) => {
+                expect(response.body.review).toBeInstanceOf(Array);
+                expect(response.body.review.length).toBe(1);
+                expect(response.body.review).toEqual([
+                    {
+                        owner: "philippaclaire9",
+                        title: "Jenga",
+                        review_id: 2,
+                        review_body: "Fiddly fun for all the family",
+                        designer: "Leslie Scott",
+                        review_img_url:
+                            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+                        category: "dexterity",
+                        created_at: new Date(1610964101251).toISOString(),
+                        votes: 5,
+                    },
+                ]);
+            });
+    });
+    it("400: returns bad request when object with invalid key sent", () => {
+        return request(app)
+            .patch("/api/reviews/2")
+            .send({ a_value: 10 })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid input");
+            });
+    });
+    it("400: returns bad request when object with invalid value sent", () => {
+        return request(app)
+            .patch("/api/reviews/2")
+            .send({ inc_votes: "hello" })
             .expect(400)
             .then((response) => {
                 expect(response.body.msg).toBe("Invalid input");
