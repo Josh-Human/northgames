@@ -164,8 +164,8 @@ describe("PATCH /api/reviews/:review_id", () => {
     });
 });
 
-describe("GET /api/reviews", () => {
-    it.only("200: returns review objects for reviewed game", () => {
+describe.only("GET /api/reviews", () => {
+    it("200: returns review objects for reviewed game", () => {
         return request(app)
             .get("/api/reviews")
             .expect(200)
@@ -188,7 +188,7 @@ describe("GET /api/reviews", () => {
                 });
             });
     });
-    it.only("200: default to sort by date in descending order", () => {
+    it("200: default to sort by date in descending order", () => {
         return request(app)
             .get("/api/reviews")
             .expect(200)
@@ -201,7 +201,7 @@ describe("GET /api/reviews", () => {
                 });
             });
     });
-    it.only("200: sort by other columns", () => {
+    it("200: sort by other columns", () => {
         return request(app)
             .get("/api/reviews?sort_by=designer")
             .expect(200)
@@ -215,7 +215,7 @@ describe("GET /api/reviews", () => {
             });
     });
 
-    it.only("200: sort by ascending", () => {
+    it("200: sort by ascending", () => {
         return request(app)
             .get("/api/reviews?order=asc")
             .expect(200)
@@ -228,7 +228,7 @@ describe("GET /api/reviews", () => {
                 });
             });
     });
-    it.only("200: can sort by category", () => {
+    it("200: can sort by category", () => {
         return request(app)
             .get("/api/reviews?category=dexterity")
             .expect(200)
@@ -249,6 +249,46 @@ describe("GET /api/reviews", () => {
                         })
                     );
                 });
+            });
+    });
+    it.only("400: invalid query", () => {
+        return request(app)
+            .get("/api/reviews?nonsense=dexterity&order=asc")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid query");
+            });
+    });
+    it("400: invalid sort_by", () => {
+        return request(app)
+            .get("/api/reviews?sort_by=nonsense")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid sort_by");
+            });
+    });
+    it("400: invalid order", () => {
+        return request(app)
+            .get("/api/reviews?order=somense")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid order");
+            });
+    });
+    it("400: invalid category", () => {
+        return request(app)
+            .get("/api/reviews?category=nothing")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid value");
+            });
+    });
+    it("400: category with no reviews", () => {
+        return request(app)
+            .get("/api/reviews?category=children''s games")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid value");
             });
     });
 });
