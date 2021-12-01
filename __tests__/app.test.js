@@ -294,7 +294,7 @@ describe("GET /api/reviews", () => {
 });
 
 describe.only("GET /api/reviews/:review_id/comments", () => {
-    it.only("200: returns arrray of comments for review id", () => {
+    it("200: returns array of comments for review id", () => {
         return request(app)
             .get("/api/reviews/2/comments")
             .expect(200)
@@ -314,107 +314,29 @@ describe.only("GET /api/reviews/:review_id/comments", () => {
                 });
             });
     });
-    it("200: default to sort by date in descending order", () => {
-        return request(app)
-            .get("/api/reviews")
-            .expect(200)
-            .then((response) => {
-                expect(response.body.reviews).toBeInstanceOf(Array);
-                expect(response.body.reviews.length).toBe(13);
-                expect(response.body.reviews).toBeSorted({
-                    key: "created_at",
-                    descending: true,
-                });
-            });
-    });
-    it("200: sort by other columns", () => {
-        return request(app)
-            .get("/api/reviews?sort_by=designer")
-            .expect(200)
-            .then((response) => {
-                expect(response.body.reviews).toBeInstanceOf(Array);
-                expect(response.body.reviews.length).toBe(13);
-                expect(response.body.reviews).toBeSorted({
-                    key: "designer",
-                    descending: true,
-                });
-            });
-    });
 
-    it("200: sort by ascending", () => {
+    it("200: returns empty array for review with no comments", () => {
         return request(app)
-            .get("/api/reviews?order=asc")
+            .get("/api/reviews/1/comments")
             .expect(200)
             .then((response) => {
-                expect(response.body.reviews).toBeInstanceOf(Array);
-                expect(response.body.reviews.length).toBe(13);
-                expect(response.body.reviews).toBeSorted({
-                    key: "created_at",
-                    ascending: true,
-                });
+                expect(response.body.comments).toEqual([]);
             });
     });
-    it("200: can sort by category", () => {
+    xit("400: returns bad request when invalid param sent", () => {
         return request(app)
-            .get("/api/reviews?category=dexterity")
-            .expect(200)
-            .then((response) => {
-                expect(response.body.reviews).toBeInstanceOf(Array);
-                expect(response.body.reviews.length).toBe(1);
-                response.body.reviews.forEach((review) => {
-                    expect(review).toEqual(
-                        expect.objectContaining({
-                            owner: expect.any(String),
-                            title: expect.any(String),
-                            review_id: expect.any(Number),
-                            category: "dexterity",
-                            review_img_url: expect.any(String),
-                            created_at: expect.any(String),
-                            votes: expect.any(Number),
-                            comment_count: expect.any(Number),
-                        })
-                    );
-                });
-            });
-    });
-    it("400: invalid query", () => {
-        return request(app)
-            .get("/api/reviews?nonsense=dexterity&order=asc")
+            .get("/api/reviews/dog/comments")
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid query");
+                expect(response.body.msg).toBe("Invalid input");
             });
     });
-    it("400: invalid sort_by", () => {
+    xit("404: returns no content when id out of range is sent", () => {
         return request(app)
-            .get("/api/reviews?sort_by=nonsense")
-            .expect(400)
-            .then((response) => {
-                expect(response.body.msg).toBe("Invalid sort_by query");
-            });
-    });
-    it("400: invalid order", () => {
-        return request(app)
-            .get("/api/reviews?order=somense")
-            .expect(400)
-            .then((response) => {
-                expect(response.body.msg).toBe("Invalid order query");
-            });
-    });
-    it("404: invalid category", () => {
-        return request(app)
-            .get("/api/reviews?category=nothing")
+            .get("/api/reviews/10000/comments")
             .expect(404)
             .then((response) => {
-                expect(response.body.msg).toBe("Value does not exist.");
-            });
-    });
-    it("404: category with no reviews", () => {
-        return request(app)
-            .get("/api/reviews?category=children's games")
-            .expect(400)
-            .then((response) => {
-                expect(response.body.msg).toBe("404 No Files");
+                expect(response.body.msg).toBe("Value does not exist");
             });
     });
 });
