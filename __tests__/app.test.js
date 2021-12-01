@@ -4,6 +4,7 @@ const seed = require("../db/seeds/seed.js");
 const app = require("../app.js");
 const request = require("supertest");
 const { response } = require("express");
+const { expect } = require("@jest/globals");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -411,7 +412,7 @@ describe("POST /api/reviews/:review_id/comments", () => {
     });
 });
 
-describe.only("DELETE /api/comments/:comment_id", () => {
+describe("DELETE /api/comments/:comment_id", () => {
     it("204: returns nothing on successful delete", () => {
         return request(app).delete("/api/comments/2").expect(204);
     });
@@ -430,6 +431,24 @@ describe.only("DELETE /api/comments/:comment_id", () => {
             .expect(404)
             .then((response) => {
                 expect(response.body.msg).toBe("Value does not exist.");
+            });
+    });
+});
+describe.only("GET /api", () => {
+    it("200: returns json of containing correctly formatted objects", () => {
+        return request(app)
+            .get("/api")
+            .expect(200)
+            .then((response) => {
+                expect(response.body).toBeInstanceOf(Object);
+                expect(Object.keys(response.body).length).toBe(8);
+                for (let endpoint in response.body) {
+                    expect(response.body[endpoint]).toEqual({
+                        description: expect.any(String),
+                        queries: expect.any(Array),
+                        exampleResponse: expect.any(Object),
+                    });
+                }
             });
     });
 });
