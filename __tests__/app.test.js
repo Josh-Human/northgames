@@ -342,7 +342,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
     });
 });
 
-describe("POST /api/reviews/:review_id/comments", () => {
+describe.only("POST /api/reviews/:review_id/comments", () => {
     it("200: returns posted comment", () => {
         return request(app)
             .post("/api/reviews/2/comments")
@@ -397,11 +397,11 @@ describe("POST /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Invalid post body.");
             });
     });
-    it("400: returns bad request when object with correct and invalid key sent", () => {
+    it.only("400: returns bad request when object with correct and invalid key sent", () => {
         return request(app)
             .post("/api/reviews/2/comments")
             .send({
-                user: "bainesface",
+                username: "bainesface",
                 body: "A real life comment!",
                 votes: 6,
             })
@@ -434,7 +434,7 @@ describe("DELETE /api/comments/:comment_id", () => {
             });
     });
 });
-describe.only("GET /api", () => {
+describe("GET /api", () => {
     it("200: returns json of containing correctly formatted objects", () => {
         return request(app)
             .get("/api")
