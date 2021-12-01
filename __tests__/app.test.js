@@ -342,7 +342,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
 });
 
 describe.only("post /api/reviews/:review_id/comments", () => {
-    it.only("200: returns posted comment", () => {
+    it("200: returns posted comment", () => {
         return request(app)
             .post("/api/reviews/2/comments")
             .send({ username: "bainesface", body: "A real life comment!" })
@@ -351,7 +351,15 @@ describe.only("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.post).toEqual("A real life comment!");
             });
     });
-    it("400: bad request when unregistered user", () => {});
+    it.only("401: user unknown when unregistered user", () => {
+        return request(app)
+            .post("/api/reviews/2/comments")
+            .send({ username: "james", body: "A real life comment!" })
+            .expect(401)
+            .then((response) => {
+                expect(response.body.msg).toEqual("Unregistered user.");
+            });
+    });
     it("400: returns bad request when invalid param sent", () => {
         return request(app)
             .post("/api/reviews/dog")

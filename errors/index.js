@@ -11,6 +11,8 @@ exports.handlePsqlErrors = (err, req, res, next) => {
         res.status(400).send({ msg: "Invalid sort_by query" });
     } else if (err.code === "42601") {
         res.status(400).send({ msg: "Invalid order query" });
+    } else if (err.code === "23503") {
+        res.status(401).send({ msg: "Unregistered user." });
     } else next(err);
 };
 exports.handleContentError = (err, req, res, next) => {
