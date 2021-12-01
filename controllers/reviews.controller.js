@@ -8,6 +8,7 @@ const {
 const {
     checkIfColumnExists,
     rejectForNoContent,
+    checkBodyKeys,
 } = require("../models/utils.model");
 
 exports.getReviewById = (req, res, next) => {
@@ -20,6 +21,7 @@ exports.getReviewById = (req, res, next) => {
         .catch(next);
 };
 
+// 400
 exports.patchReviewById = (req, res, next) => {
     const { review_id } = req.params;
     const keys = Object.keys(req.body);
@@ -41,6 +43,7 @@ exports.patchReviewById = (req, res, next) => {
     }
 };
 
+// 400
 exports.getReviews = (req, res, next) => {
     let { sort_by, order, category } = req.query;
     let noError = true;
@@ -83,20 +86,18 @@ exports.getCommentsByReviewId = (req, res, next) => {
         .catch(next);
 };
 
+// 400
 exports.postCommentByReviewId = (req, res, next) => {
     const { review_id } = req.params;
     const { username, body } = req.body;
 
-    let noError = true;
     let allowedKeys = ["username", "body"];
-    let categoryQuery = undefined;
-    for (let key of Object.keys(req.body)) {
-        if (!allowedKeys.includes(key)) {
-            res.status(400).send({ msg: "Invalid body input." });
-            noError = false;
-        }
-    }
-    if (noError) {
+    const check = Object.keys(req.body).every((key) =>
+        allowedKeys.includes(key)
+    );
+    if (!check) {
+        return checkBodyKeys().catch(next);
+    } else {
         insertCommentByReviewId(review_id, username, body)
             .then((post) => {
                 res.status(200).send({ post });

@@ -1,5 +1,6 @@
 const db = require("../db/connection.js");
 const format = require("pg-format");
+
 exports.rejectForNoContent = () => {
     return Promise.reject({
         status: 404,
@@ -17,4 +18,8 @@ exports.checkIfColumnExists = (column, table, value) => {
                 return exports.rejectForNoContent();
             }
         });
+};
+
+exports.checkBodyKeys = (allowedKeys, body) => {
+    return Promise.reject({ status: 400, msg: "Invalid body input." });
 };
