@@ -36,10 +36,22 @@ exports.patchReviewById = (req, res, next) => {
 
 exports.getReviews = (req, res, next) => {
     let { sort_by, order, category } = req.query;
+    let noError = true;
+    let allowedKeys = ["sort_by", "order", "category"];
+    let categoryQuery = "";
+    for (let key of Object.keys(req.query)) {
+        if (!allowedKeys.includes(key)) {
+            res.status(400).send({ msg: "Invalid query" });
+            noError = false;
+        }
+    }
+
     if (category) {
         category = `category='${category}'`;
     }
-    selectReviews(sort_by, order, category).then((reviews) => {
-        res.status(200).send({ reviews });
-    });
+    if (noError) {
+        selectReviews(sort_by, order, category).then((reviews) => {
+            res.status(200).send({ reviews });
+        });
+    }
 };

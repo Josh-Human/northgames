@@ -251,7 +251,7 @@ describe.only("GET /api/reviews", () => {
                 });
             });
     });
-    it.only("400: invalid query", () => {
+    it("400: invalid query", () => {
         return request(app)
             .get("/api/reviews?nonsense=dexterity&order=asc")
             .expect(400)
@@ -259,7 +259,7 @@ describe.only("GET /api/reviews", () => {
                 expect(response.body.msg).toBe("Invalid query");
             });
     });
-    it("400: invalid sort_by", () => {
+    xit("400: invalid sort_by", () => {
         return request(app)
             .get("/api/reviews?sort_by=nonsense")
             .expect(400)
@@ -267,7 +267,7 @@ describe.only("GET /api/reviews", () => {
                 expect(response.body.msg).toBe("Invalid sort_by");
             });
     });
-    it("400: invalid order", () => {
+    xit("400: invalid order", () => {
         return request(app)
             .get("/api/reviews?order=somense")
             .expect(400)
@@ -275,7 +275,7 @@ describe.only("GET /api/reviews", () => {
                 expect(response.body.msg).toBe("Invalid order");
             });
     });
-    it("400: invalid category", () => {
+    xit("400: invalid category", () => {
         return request(app)
             .get("/api/reviews?category=nothing")
             .expect(400)
@@ -283,7 +283,7 @@ describe.only("GET /api/reviews", () => {
                 expect(response.body.msg).toBe("Invalid value");
             });
     });
-    it("400: category with no reviews", () => {
+    xit("400: category with no reviews", () => {
         return request(app)
             .get("/api/reviews?category=children''s games")
             .expect(400)
