@@ -3,6 +3,7 @@ const {
     updateReviewById,
     selectReviews,
     selectCommentsByReviewId,
+    insertCommentByReviewId,
 } = require("../models/reviews.model");
 const { checkIfColumnExists } = require("../models/utils.model");
 
@@ -71,6 +72,17 @@ exports.getCommentsByReviewId = (req, res, next) => {
         })
         .then((comments) => {
             res.status(200).send({ comments });
+        })
+        .catch(next);
+};
+
+exports.postCommentByReviewId = (req, res, next) => {
+    const { review_id } = req.params;
+    const { username, body } = req.body;
+
+    insertCommentByReviewId(review_id, username, body)
+        .then((post) => {
+            res.status(200).send({ post });
         })
         .catch(next);
 };

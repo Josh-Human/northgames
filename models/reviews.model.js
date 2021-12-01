@@ -117,3 +117,17 @@ exports.selectCommentsByReviewId = (id) => {
             return rows;
         });
 };
+
+exports.insertCommentByReviewId = (review_id, username, body) => {
+    const dateCreated = new Date(Date.now()).toISOString();
+    return db
+        .query(
+            `INSERT INTO comments(author,body,created_at, review_id)
+        VALUES($1,$2,$3::Date,$4)
+        RETURNING *;`,
+            [username, body, dateCreated, review_id]
+        )
+        .then(({ rows }) => {
+            return rows[0].body;
+        });
+};

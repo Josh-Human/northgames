@@ -293,7 +293,7 @@ describe("GET /api/reviews", () => {
     });
 });
 
-describe.only("GET /api/reviews/:review_id/comments", () => {
+describe("GET /api/reviews/:review_id/comments", () => {
     it("200: returns array of comments for review id", () => {
         return request(app)
             .get("/api/reviews/2/comments")
@@ -337,6 +337,88 @@ describe.only("GET /api/reviews/:review_id/comments", () => {
             .expect(404)
             .then((response) => {
                 expect(response.body.msg).toBe("Value does not exist.");
+            });
+    });
+});
+
+describe.only("post /api/reviews/:review_id/comments", () => {
+    it.only("200: returns posted comment", () => {
+        return request(app)
+            .post("/api/reviews/2/comments")
+            .send({ username: "bainesface", body: "A real life comment!" })
+            .expect(200)
+            .then((response) => {
+                expect(response.body.post).toEqual("A real life comment!");
+            });
+    });
+    it("400: bad request when unregistered user", () => {});
+    it("400: returns bad request when invalid param sent", () => {
+        return request(app)
+            .post("/api/reviews/dog")
+            .send({ username: "james", body: "A real life comment!" })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid input");
+            });
+    });
+    it("404: returns no content when id out of range is sent", () => {
+        return request(app)
+            .post("/api/reviews/10000")
+            .send({ username: "james", body: "A real life comment!" })
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("Value does not exist");
+            });
+    });
+    it("200: returns unedited review when empty object sent", () => {
+        return request(app)
+            .post("/api/reviews/2")
+            .send({})
+            .expect(200)
+            .then((response) => {
+                expect(response.body.review).toBeInstanceOf(Array);
+                expect(response.body.review.length).toBe(1);
+                expect(response.body.review).toEqual([
+                    {
+                        owner: "philippaclaire9",
+                        title: "Jenga",
+                        review_id: 2,
+                        review_body: "Fiddly fun for all the family",
+                        designer: "Leslie Scott",
+                        review_img_url:
+                            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+                        category: "dexterity",
+                        created_at: new Date(1610964101251).toISOString(),
+                        votes: 5,
+                    },
+                ]);
+            });
+    });
+    it("400: returns bad request when object with invalid key sent", () => {
+        return request(app)
+            .post("/api/reviews/2")
+            .send({ a_value: 10 })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid input");
+            });
+    });
+    it("400: returns bad request when object with invalid value sent", () => {
+        return request(app)
+            .post("/api/reviews/2")
+            .send({ inc_votes: "hello" })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid input");
+            });
+    });
+    it("400: returns bad request when object with correct and invalid key sent", () => {
+        return request(app)
+            .post("/api/reviews/2")
+            .send({ inc_votes: 1, name: "Mitch" })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid input");
             });
     });
 });
