@@ -13,7 +13,7 @@ exports.selectReviewById = (id) => {
         )
         .then((result) => {
             return Promise.all([
-                result.rows[0],
+                result.rows,
                 db.query(
                     `SELECT COUNT(*) FROM comments
             WHERE review_id = $1;`,
@@ -22,14 +22,14 @@ exports.selectReviewById = (id) => {
             ]);
         })
         .then(([review, comment_count]) => {
-            if (!review) {
+            if (review.length < 1) {
                 return Promise.reject({
                     status: 404,
                     msg: "Value does not exist",
                 });
             }
-            review.comment_count = Number(comment_count.rows[0].count);
-            return [review];
+            review[0].comment_count = Number(comment_count.rows[0].count);
+            return review;
         });
 };
 

@@ -26,7 +26,7 @@ describe("GET /api/categories", () => {
             });
     });
 });
-describe("GET /api/reviews/:review_id", () => {
+describe.only("GET /api/reviews/:review_id", () => {
     it("200: returns review object for reviewed game", () => {
         return request(app)
             .get("/api/reviews/2")
