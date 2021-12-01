@@ -396,13 +396,17 @@ describe.only("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Invalid post body.");
             });
     });
-    xit("400: returns bad request when object with correct and invalid key sent", () => {
+    it("400: returns bad request when object with correct and invalid key sent", () => {
         return request(app)
-            .post("/api/reviews/2")
-            .send({ inc_votes: 1, name: "Mitch" })
+            .post("/api/reviews/2/comments")
+            .send({
+                user: "bainesface",
+                body: "A real life comment!",
+                votes: 6,
+            })
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid input");
+                expect(response.body.msg).toBe("Invalid body input.");
             });
     });
 });
