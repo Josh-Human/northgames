@@ -50,8 +50,10 @@ exports.getReviews = (req, res, next) => {
         category = `category='${category}'`;
     }
     if (noError) {
-        selectReviews(sort_by, order, category).then((reviews) => {
-            res.status(200).send({ reviews });
-        });
+        selectReviews(sort_by, order, category)
+            .then((reviews) => {
+                res.status(200).send({ reviews });
+            })
+            .catch(next);
     }
 };

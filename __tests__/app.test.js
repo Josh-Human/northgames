@@ -259,7 +259,7 @@ describe.only("GET /api/reviews", () => {
                 expect(response.body.msg).toBe("Invalid query");
             });
     });
-    xit("400: invalid sort_by", () => {
+    it.only("400: invalid sort_by", () => {
         return request(app)
             .get("/api/reviews?sort_by=nonsense")
             .expect(400)
