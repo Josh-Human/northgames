@@ -331,12 +331,12 @@ describe.only("GET /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Invalid input");
             });
     });
-    xit("404: returns no content when id out of range is sent", () => {
+    it("404: returns no content when id out of range is sent", () => {
         return request(app)
             .get("/api/reviews/10000/comments")
             .expect(404)
             .then((response) => {
-                expect(response.body.msg).toBe("Value does not exist");
+                expect(response.body.msg).toBe("Value does not exist.");
             });
     });
 });

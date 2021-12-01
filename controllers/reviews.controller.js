@@ -65,7 +65,10 @@ exports.getReviews = (req, res, next) => {
 
 exports.getCommentsByReviewId = (req, res, next) => {
     const { review_id } = req.params;
-    selectCommentsByReviewId(review_id)
+    checkIfColumnExists("review_id", "reviews", review_id)
+        .then(() => {
+            return selectCommentsByReviewId(review_id);
+        })
         .then((comments) => {
             res.status(200).send({ comments });
         })

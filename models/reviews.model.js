@@ -114,7 +114,6 @@ exports.selectCommentsByReviewId = (id) => {
             [id]
         )
         .then(({ rows }) => {
-            console.log(rows);
             return rows;
         });
 };
