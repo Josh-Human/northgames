@@ -451,4 +451,24 @@ describe.only("GET /api", () => {
                 }
             });
     });
+    it("200: returns correct json object", () => {
+        return request(app)
+            .get("/api")
+            .expect(200)
+            .then((response) => {
+                expect(response.body["GET /api/categories"]).toEqual({
+                    description: "serves an array of all categories",
+                    queries: [],
+                    exampleResponse: {
+                        categories: [
+                            {
+                                description:
+                                    "Players attempt to uncover each other's hidden role",
+                                slug: "Social deduction",
+                            },
+                        ],
+                    },
+                });
+            });
+    });
 });
