@@ -259,20 +259,20 @@ describe.only("GET /api/reviews", () => {
                 expect(response.body.msg).toBe("Invalid query");
             });
     });
-    it.only("400: invalid sort_by", () => {
+    it("400: invalid sort_by", () => {
         return request(app)
             .get("/api/reviews?sort_by=nonsense")
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid sort_by");
+                expect(response.body.msg).toBe("Invalid sort_by query");
             });
     });
-    xit("400: invalid order", () => {
+    it("400: invalid order", () => {
         return request(app)
             .get("/api/reviews?order=somense")
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid order");
+                expect(response.body.msg).toBe("Invalid order query");
             });
     });
     xit("400: invalid category", () => {

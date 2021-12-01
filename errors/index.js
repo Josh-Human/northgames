@@ -8,7 +8,9 @@ exports.handlePsqlErrors = (err, req, res, next) => {
     if (err.code === "22P02") {
         res.status(400).send({ msg: "Invalid input" });
     } else if (err.code === "42703") {
-        res.status(400).send({ msg: "Invalid sort_by" });
+        res.status(400).send({ msg: "Invalid sort_by query" });
+    } else if (err.code === "42601") {
+        res.status(400).send({ msg: "Invalid order query" });
     } else next(err);
 };
 exports.handleContentError = (err, req, res, next) => {
