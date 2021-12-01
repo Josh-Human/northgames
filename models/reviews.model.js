@@ -120,6 +120,12 @@ exports.selectCommentsByReviewId = (id) => {
 
 exports.insertCommentByReviewId = (review_id, username, body) => {
     const dateCreated = new Date(Date.now()).toISOString();
+    if (typeof body !== "string") {
+        if (!body) {
+            return Promise.reject({ code: "23502" });
+        }
+        return Promise.reject({ status: 400, msg: "Invalid post body." });
+    }
     return db
         .query(
             `INSERT INTO comments(author,body,created_at, review_id)
