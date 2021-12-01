@@ -323,7 +323,7 @@ describe.only("GET /api/reviews/:review_id/comments", () => {
                 expect(response.body.comments).toEqual([]);
             });
     });
-    xit("400: returns bad request when invalid param sent", () => {
+    it("400: returns bad request when invalid param sent", () => {
         return request(app)
             .get("/api/reviews/dog/comments")
             .expect(400)
