@@ -14,9 +14,7 @@ exports.getReviewById = (req, res, next) => {
     const { review_id } = req.params;
     selectReviewById(review_id)
         .then((review) => {
-            if (rejectForNoContent(review.length)) {
-                return rejectForNoContent(review.length);
-            }
+            if (review.length < 1) return rejectForNoContent();
             res.status(200).send({ review });
         })
         .catch(next);
@@ -36,6 +34,7 @@ exports.patchReviewById = (req, res, next) => {
         const { inc_votes } = req.body;
         updateReviewById(review_id, inc_votes)
             .then((review) => {
+                if (review.length < 1) return rejectForNoContent();
                 res.status(200).send({ review });
             })
             .catch(next);
@@ -64,6 +63,8 @@ exports.getReviews = (req, res, next) => {
                 return selectReviews(sort_by, order, categoryQuery);
             })
             .then((reviews) => {
+                if (reviews.length < 1) return rejectForNoContent();
+
                 res.status(200).send({ reviews });
             })
             .catch(next);

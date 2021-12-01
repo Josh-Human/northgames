@@ -26,7 +26,7 @@ describe("GET /api/categories", () => {
             });
     });
 });
-describe.only("GET /api/reviews/:review_id", () => {
+describe("GET /api/reviews/:review_id", () => {
     it("200: returns review object for reviewed game", () => {
         return request(app)
             .get("/api/reviews/2")
@@ -266,15 +266,15 @@ describe("GET /api/reviews", () => {
             .get("/api/reviews?category=nothing")
             .expect(404)
             .then((response) => {
-                expect(response.body.msg).toBe("Value does not exist.");
+                expect(response.body.msg).toBe("Value does not exist");
             });
     });
     it("404: category with no reviews", () => {
         return request(app)
             .get("/api/reviews?category=children's games")
-            .expect(400)
+            .expect(404)
             .then((response) => {
-                expect(response.body.msg).toBe("404 No Files");
+                expect(response.body.msg).toBe("Value does not exist");
             });
     });
 });
@@ -322,7 +322,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
             .get("/api/reviews/10000/comments")
             .expect(404)
             .then((response) => {
-                expect(response.body.msg).toBe("Value does not exist.");
+                expect(response.body.msg).toBe("Value does not exist");
             });
     });
 });
@@ -415,7 +415,7 @@ describe("DELETE /api/comments/:comment_id", () => {
             .delete("/api/comments/4000")
             .expect(404)
             .then((response) => {
-                expect(response.body.msg).toBe("Value does not exist.");
+                expect(response.body.msg).toBe("Value does not exist");
             });
     });
 });

@@ -1,6 +1,7 @@
 const db = require("../db/connection.js");
 const reviewRouter = require("../routers/reviews.router.js");
 const format = require("pg-format");
+const { rejectForNoContent } = require("./utils.model.js");
 // use count in select and join
 // use alias for lines 28-30 top rename the count to be comment_count
 
@@ -17,12 +18,6 @@ exports.selectReviewById = (review_id) => {
             [review_id]
         )
         .then(({ rows }) => {
-            if (rows.length < 1) {
-                return Promise.reject({
-                    status: 404,
-                    msg: "Value does not exist",
-                });
-            }
             return rows;
         });
 };
@@ -40,14 +35,8 @@ exports.updateReviewById = (review_id, inc_votes) => {
     RETURNING *;`,
             [inc_votes, review_id]
         )
-        .then((result) => {
-            if (result.rows.length < 1) {
-                return Promise.reject({
-                    status: 404,
-                    msg: "Value does not exist",
-                });
-            }
-            return result.rows;
+        .then(({ rows }) => {
+            return rows;
         });
 };
 
@@ -73,9 +62,6 @@ exports.selectReviews = (
             )
         )
         .then(({ rows }) => {
-            if (rows.length < 1) {
-                return Promise.reject({ status: 400, msg: "404 No Files" });
-            }
             const returnArray = [];
             rows.forEach((review) => {
                 review.comment_count = parseInt(review.comment_count);
