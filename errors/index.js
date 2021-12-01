@@ -12,7 +12,11 @@ exports.handlePsqlErrors = (err, req, res, next) => {
     } else if (err.code === "42601") {
         res.status(400).send({ msg: "Invalid order query" });
     } else if (err.code === "23503") {
-        res.status(401).send({ msg: "Unregistered user." });
+        if (err.constraint === "comments_review_id_fkey") {
+            res.status(400).send({ msg: "Review does not exist." });
+        } else {
+            res.status(401).send({ msg: "Unregistered user." });
+        }
     } else next(err);
 };
 exports.handleContentError = (err, req, res, next) => {

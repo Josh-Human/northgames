@@ -360,22 +360,22 @@ describe.only("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toEqual("Unregistered user.");
             });
     });
-    it("400: returns bad request when invalid body sent", () => {
+    it("400: returns bad request when invalid body key sent", () => {
         return request(app)
             .post("/api/reviews/2/comments")
-            .send({ user: "james", body: "A real life comment!" })
+            .send({ user: "bainesface", body: "A real life comment!" })
             .expect(400)
             .then((response) => {
                 expect(response.body.msg).toBe("Invalid body input.");
             });
     });
-    xit("404: returns no content when id out of range is sent", () => {
+    it("400: returns no content when id out of range is sent", () => {
         return request(app)
-            .post("/api/reviews/10000")
-            .send({ username: "james", body: "A real life comment!" })
-            .expect(404)
+            .post("/api/reviews/2000/comments")
+            .send({ username: "bainesface", body: "A real life comment!" })
+            .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Value does not exist");
+                expect(response.body.msg).toBe("Review does not exist.");
             });
     });
     xit("200: returns unedited review when empty object sent", () => {
