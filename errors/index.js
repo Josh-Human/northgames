@@ -17,6 +17,8 @@ exports.handlePsqlErrors = (err, req, res, next) => {
         } else {
             res.status(401).send({ msg: "Unregistered user." });
         }
+    } else if (err.code === "23502") {
+        res.status(400).send({ msg: "No content sent." });
     } else next(err);
 };
 exports.handleContentError = (err, req, res, next) => {

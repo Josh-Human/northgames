@@ -378,28 +378,13 @@ describe.only("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Review does not exist.");
             });
     });
-    xit("200: returns unedited review when empty object sent", () => {
+    it("400: bad request when empty object sent", () => {
         return request(app)
-            .post("/api/reviews/2")
+            .post("/api/reviews/2/comments")
             .send({})
-            .expect(200)
+            .expect(400)
             .then((response) => {
-                expect(response.body.review).toBeInstanceOf(Array);
-                expect(response.body.review.length).toBe(1);
-                expect(response.body.review).toEqual([
-                    {
-                        owner: "philippaclaire9",
-                        title: "Jenga",
-                        review_id: 2,
-                        review_body: "Fiddly fun for all the family",
-                        designer: "Leslie Scott",
-                        review_img_url:
-                            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-                        category: "dexterity",
-                        created_at: new Date(1610964101251).toISOString(),
-                        votes: 5,
-                    },
-                ]);
+                expect(response.body.msg).toBe("No content sent.");
             });
     });
     xit("400: returns bad request when object with invalid key sent", () => {
