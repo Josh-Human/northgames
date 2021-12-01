@@ -80,9 +80,20 @@ exports.postCommentByReviewId = (req, res, next) => {
     const { review_id } = req.params;
     const { username, body } = req.body;
 
-    insertCommentByReviewId(review_id, username, body)
-        .then((post) => {
-            res.status(200).send({ post });
-        })
-        .catch(next);
+    let noError = true;
+    let allowedKeys = ["username", "body"];
+    let categoryQuery = undefined;
+    for (let key of Object.keys(req.body)) {
+        if (!allowedKeys.includes(key)) {
+            res.status(400).send({ msg: "Invalid body input." });
+            noError = false;
+        }
+    }
+    if (noError) {
+        insertCommentByReviewId(review_id, username, body)
+            .then((post) => {
+                res.status(200).send({ post });
+            })
+            .catch(next);
+    }
 };

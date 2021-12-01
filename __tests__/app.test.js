@@ -351,7 +351,7 @@ describe.only("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.post).toEqual("A real life comment!");
             });
     });
-    it.only("401: user unknown when unregistered user", () => {
+    it("401: user unknown when unregistered user", () => {
         return request(app)
             .post("/api/reviews/2/comments")
             .send({ username: "james", body: "A real life comment!" })
@@ -360,16 +360,16 @@ describe.only("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toEqual("Unregistered user.");
             });
     });
-    it("400: returns bad request when invalid param sent", () => {
+    it("400: returns bad request when invalid body sent", () => {
         return request(app)
-            .post("/api/reviews/dog")
-            .send({ username: "james", body: "A real life comment!" })
+            .post("/api/reviews/2/comments")
+            .send({ user: "james", body: "A real life comment!" })
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid input");
+                expect(response.body.msg).toBe("Invalid body input.");
             });
     });
-    it("404: returns no content when id out of range is sent", () => {
+    xit("404: returns no content when id out of range is sent", () => {
         return request(app)
             .post("/api/reviews/10000")
             .send({ username: "james", body: "A real life comment!" })
@@ -378,7 +378,7 @@ describe.only("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Value does not exist");
             });
     });
-    it("200: returns unedited review when empty object sent", () => {
+    xit("200: returns unedited review when empty object sent", () => {
         return request(app)
             .post("/api/reviews/2")
             .send({})
@@ -402,7 +402,7 @@ describe.only("post /api/reviews/:review_id/comments", () => {
                 ]);
             });
     });
-    it("400: returns bad request when object with invalid key sent", () => {
+    xit("400: returns bad request when object with invalid key sent", () => {
         return request(app)
             .post("/api/reviews/2")
             .send({ a_value: 10 })
@@ -411,7 +411,7 @@ describe.only("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Invalid input");
             });
     });
-    it("400: returns bad request when object with invalid value sent", () => {
+    xit("400: returns bad request when object with invalid value sent", () => {
         return request(app)
             .post("/api/reviews/2")
             .send({ inc_votes: "hello" })
@@ -420,7 +420,7 @@ describe.only("post /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Invalid input");
             });
     });
-    it("400: returns bad request when object with correct and invalid key sent", () => {
+    xit("400: returns bad request when object with correct and invalid key sent", () => {
         return request(app)
             .post("/api/reviews/2")
             .send({ inc_votes: 1, name: "Mitch" })
