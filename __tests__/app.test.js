@@ -283,12 +283,12 @@ describe.only("GET /api/reviews", () => {
                 expect(response.body.msg).toBe("Value does not exist.");
             });
     });
-    xit("400: category with no reviews", () => {
+    it("404: category with no reviews", () => {
         return request(app)
-            .get("/api/reviews?category=children''s games")
+            .get("/api/reviews?category=children's games")
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid value");
+                expect(response.body.msg).toBe("404 No Files");
             });
     });
 });

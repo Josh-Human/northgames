@@ -93,6 +93,9 @@ exports.selectReviews = (
             )
         )
         .then(({ rows }) => {
+            if (rows.length < 1) {
+                return Promise.reject({ status: 400, msg: "404 No Files" });
+            }
             const returnArray = [];
             rows.forEach((review) => {
                 review.comment_count = parseInt(review.comment_count);

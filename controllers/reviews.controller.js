@@ -48,6 +48,7 @@ exports.getReviews = (req, res, next) => {
 
     if (category) {
         categoryQuery = `category='${category}'`;
+        categoryQuery = categoryQuery.replace("'s", "''s");
     }
     if (noError) {
         checkIfColumnExists("slug", "categories", category)
