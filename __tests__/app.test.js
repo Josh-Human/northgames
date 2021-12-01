@@ -412,12 +412,13 @@ describe("POST /api/reviews/:review_id/comments", () => {
 });
 
 describe.only("DELETE /api/comments/:comment_id", () => {
-    it.only("204: returns nothing on successful delete", () => {
+    it("204: returns nothing on successful delete", () => {
         return request(app).delete("/api/comments/2").expect(204);
     });
+    //! running twice?
     it("400: returns bad request when invalid param sent", () => {
         return request(app)
-            .get("/api/reviews/dog")
+            .delete("/api/comments/dog")
             .expect(400)
             .then((response) => {
                 expect(response.body.msg).toBe("Invalid input");
@@ -425,10 +426,10 @@ describe.only("DELETE /api/comments/:comment_id", () => {
     });
     it("404: returns no content when id out of range is sent", () => {
         return request(app)
-            .get("/api/reviews/10000")
+            .delete("/api/comments/4000")
             .expect(404)
             .then((response) => {
-                expect(response.body.msg).toBe("Value does not exist");
+                expect(response.body.msg).toBe("Value does not exist.");
             });
     });
 });
