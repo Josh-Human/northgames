@@ -104,3 +104,17 @@ exports.selectReviews = (
             return returnArray;
         });
 };
+
+exports.selectCommentsByReviewId = (id) => {
+    return db
+        .query(
+            `SELECT comment_id, votes,created_at,author,body 
+        FROM comments
+        WHERE review_id = $1;`,
+            [id]
+        )
+        .then(({ rows }) => {
+            console.log(rows);
+            return rows;
+        });
+};

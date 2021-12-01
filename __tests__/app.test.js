@@ -164,7 +164,7 @@ describe("PATCH /api/reviews/:review_id", () => {
     });
 });
 
-describe.only("GET /api/reviews", () => {
+describe("GET /api/reviews", () => {
     it("200: returns review objects for reviewed game", () => {
         return request(app)
             .get("/api/reviews")
@@ -183,6 +183,132 @@ describe.only("GET /api/reviews", () => {
                             created_at: expect.any(String),
                             votes: expect.any(Number),
                             comment_count: expect.any(Number),
+                        })
+                    );
+                });
+            });
+    });
+    it("200: default to sort by date in descending order", () => {
+        return request(app)
+            .get("/api/reviews")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.reviews).toBeInstanceOf(Array);
+                expect(response.body.reviews.length).toBe(13);
+                expect(response.body.reviews).toBeSorted({
+                    key: "created_at",
+                    descending: true,
+                });
+            });
+    });
+    it("200: sort by other columns", () => {
+        return request(app)
+            .get("/api/reviews?sort_by=designer")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.reviews).toBeInstanceOf(Array);
+                expect(response.body.reviews.length).toBe(13);
+                expect(response.body.reviews).toBeSorted({
+                    key: "designer",
+                    descending: true,
+                });
+            });
+    });
+
+    it("200: sort by ascending", () => {
+        return request(app)
+            .get("/api/reviews?order=asc")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.reviews).toBeInstanceOf(Array);
+                expect(response.body.reviews.length).toBe(13);
+                expect(response.body.reviews).toBeSorted({
+                    key: "created_at",
+                    ascending: true,
+                });
+            });
+    });
+    it("200: can sort by category", () => {
+        return request(app)
+            .get("/api/reviews?category=dexterity")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.reviews).toBeInstanceOf(Array);
+                expect(response.body.reviews.length).toBe(1);
+                response.body.reviews.forEach((review) => {
+                    expect(review).toEqual(
+                        expect.objectContaining({
+                            owner: expect.any(String),
+                            title: expect.any(String),
+                            review_id: expect.any(Number),
+                            category: "dexterity",
+                            review_img_url: expect.any(String),
+                            created_at: expect.any(String),
+                            votes: expect.any(Number),
+                            comment_count: expect.any(Number),
+                        })
+                    );
+                });
+            });
+    });
+    it("400: invalid query", () => {
+        return request(app)
+            .get("/api/reviews?nonsense=dexterity&order=asc")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid query");
+            });
+    });
+    it("400: invalid sort_by", () => {
+        return request(app)
+            .get("/api/reviews?sort_by=nonsense")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid sort_by query");
+            });
+    });
+    it("400: invalid order", () => {
+        return request(app)
+            .get("/api/reviews?order=somense")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid order query");
+            });
+    });
+    it("404: invalid category", () => {
+        return request(app)
+            .get("/api/reviews?category=nothing")
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("Value does not exist.");
+            });
+    });
+    it("404: category with no reviews", () => {
+        return request(app)
+            .get("/api/reviews?category=children's games")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("404 No Files");
+            });
+    });
+});
+
+describe.only("GET /api/reviews/:review_id/comments", () => {
+    it.only("200: returns arrray of comments for review id", () => {
+        return request(app)
+            .get("/api/reviews/2/comments")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.comments).toBeInstanceOf(Array);
+                expect(response.body.comments.length).toBe(3);
+                response.body.comments.forEach((comment) => {
+                    expect(comment).toEqual(
+                        expect.objectContaining({
+                            comment_id: expect.any(Number),
+                            votes: expect.any(Number),
+                            created_at: expect.any(String),
+                            author: expect.any(String),
+                            body: expect.any(String),
                         })
                     );
                 });
