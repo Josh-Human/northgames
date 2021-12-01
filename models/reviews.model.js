@@ -35,21 +35,7 @@ exports.selectReviewById = (id) => {
 
 exports.updateReviewById = (review_id, inc_votes) => {
     if (!inc_votes) {
-        return db
-            .query(
-                `SELECT * FROM reviews
-        WHERE review_id = $1`,
-                [review_id]
-            )
-            .then((result) => {
-                if (result.rows.length < 1) {
-                    return Promise.reject({
-                        status: 404,
-                        msg: "Value does not exist",
-                    });
-                }
-                return result.rows;
-            });
+        return Promise.reject({ status: 400, msg: "Invalid body sent." });
     }
 
     return db

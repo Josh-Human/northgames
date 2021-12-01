@@ -112,28 +112,13 @@ describe("PATCH /api/reviews/:review_id", () => {
                 expect(response.body.msg).toBe("Value does not exist");
             });
     });
-    it("200: returns unedited review when empty object sent", () => {
+    it("400: returns bad request when empty body sent", () => {
         return request(app)
             .patch("/api/reviews/2")
             .send({})
-            .expect(200)
+            .expect(400)
             .then((response) => {
-                expect(response.body.review).toBeInstanceOf(Array);
-                expect(response.body.review.length).toBe(1);
-                expect(response.body.review).toEqual([
-                    {
-                        owner: "philippaclaire9",
-                        title: "Jenga",
-                        review_id: 2,
-                        review_body: "Fiddly fun for all the family",
-                        designer: "Leslie Scott",
-                        review_img_url:
-                            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-                        category: "dexterity",
-                        created_at: new Date(1610964101251).toISOString(),
-                        votes: 5,
-                    },
-                ]);
+                expect(response.body.msg).toBe("Invalid body sent.");
             });
     });
     it("400: returns bad request when object with invalid key sent", () => {
@@ -342,7 +327,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
     });
 });
 
-describe.only("POST /api/reviews/:review_id/comments", () => {
+describe("POST /api/reviews/:review_id/comments", () => {
     it("200: returns posted comment", () => {
         return request(app)
             .post("/api/reviews/2/comments")
@@ -397,7 +382,7 @@ describe.only("POST /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Invalid post body.");
             });
     });
-    it.only("400: returns bad request when object with correct and invalid key sent", () => {
+    it("400: returns bad request when object with correct and invalid key sent", () => {
         return request(app)
             .post("/api/reviews/2/comments")
             .send({
