@@ -16,3 +16,12 @@ exports.checkIfColumnExists = (column, table, value) => {
             }
         });
 };
+
+exports.rejectForNoContent = (rows) => {
+    if (rows < 1) {
+        return Promise.reject({
+            status: 404,
+            msg: "Value does not exist",
+        });
+    }
+};

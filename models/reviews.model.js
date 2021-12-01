@@ -4,32 +4,26 @@ const format = require("pg-format");
 // use count in select and join
 // use alias for lines 28-30 top rename the count to be comment_count
 
-exports.selectReviewById = (id) => {
+exports.selectReviewById = (review_id) => {
     return db
         .query(
-            `SELECT * FROM reviews
-            WHERE review_id = $1;`,
-            [id]
+            `SELECT reviews.review_id, title, review_body, designer, 
+            review_img_url, reviews.votes, category, owner, reviews.created_at,
+            COUNT(comments.comment_id)::INT AS comment_count
+            FROM REVIEWS
+            FULL OUTER JOIN comments ON reviews.review_id = comments.review_id
+            WHERE reviews.review_id = $1
+            GROUP BY reviews.review_id;`,
+            [review_id]
         )
-        .then((result) => {
-            return Promise.all([
-                result.rows,
-                db.query(
-                    `SELECT COUNT(*) FROM comments
-            WHERE review_id = $1;`,
-                    [id]
-                ),
-            ]);
-        })
-        .then(([review, comment_count]) => {
-            if (review.length < 1) {
+        .then(({ rows }) => {
+            if (rows.length < 1) {
                 return Promise.reject({
                     status: 404,
                     msg: "Value does not exist",
                 });
             }
-            review[0].comment_count = Number(comment_count.rows[0].count);
-            return review;
+            return rows;
         });
 };
 

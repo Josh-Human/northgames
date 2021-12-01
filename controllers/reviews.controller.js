@@ -5,12 +5,18 @@ const {
     selectCommentsByReviewId,
     insertCommentByReviewId,
 } = require("../models/reviews.model");
-const { checkIfColumnExists } = require("../models/utils.model");
+const {
+    checkIfColumnExists,
+    rejectForNoContent,
+} = require("../models/utils.model");
 
 exports.getReviewById = (req, res, next) => {
     const { review_id } = req.params;
     selectReviewById(review_id)
         .then((review) => {
+            if (rejectForNoContent(review.length)) {
+                return rejectForNoContent(review.length);
+            }
             res.status(200).send({ review });
         })
         .catch(next);
