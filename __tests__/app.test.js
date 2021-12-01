@@ -341,7 +341,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
     });
 });
 
-describe.only("post /api/reviews/:review_id/comments", () => {
+describe("POST /api/reviews/:review_id/comments", () => {
     it("200: returns posted comment", () => {
         return request(app)
             .post("/api/reviews/2/comments")
@@ -407,6 +407,28 @@ describe.only("post /api/reviews/:review_id/comments", () => {
             .expect(400)
             .then((response) => {
                 expect(response.body.msg).toBe("Invalid body input.");
+            });
+    });
+});
+
+describe.only("DELETE /api/comments/:comment_id", () => {
+    it.only("204: returns nothing on successful delete", () => {
+        return request(app).delete("/api/comments/2").expect(204);
+    });
+    it("400: returns bad request when invalid param sent", () => {
+        return request(app)
+            .get("/api/reviews/dog")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid input");
+            });
+    });
+    it("404: returns no content when id out of range is sent", () => {
+        return request(app)
+            .get("/api/reviews/10000")
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("Value does not exist");
             });
     });
 });

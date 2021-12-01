@@ -134,7 +134,6 @@ exports.insertCommentByReviewId = (review_id, username, body) => {
             [username, body, dateCreated, review_id]
         )
         .then(({ rows }) => {
-            console.log("here");
             return rows[0].body;
         });
 };
