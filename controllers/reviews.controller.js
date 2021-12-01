@@ -38,7 +38,7 @@ exports.getReviews = (req, res, next) => {
     let { sort_by, order, category } = req.query;
     let noError = true;
     let allowedKeys = ["sort_by", "order", "category"];
-    let categoryQuery = "";
+    let categoryQuery = undefined;
     for (let key of Object.keys(req.query)) {
         if (!allowedKeys.includes(key)) {
             res.status(400).send({ msg: "Invalid query" });
@@ -47,10 +47,13 @@ exports.getReviews = (req, res, next) => {
     }
 
     if (category) {
-        category = `category='${category}'`;
+        categoryQuery = `category='${category}'`;
     }
     if (noError) {
-        selectReviews(sort_by, order, category)
+        checkIfColumnExists("slug", "categories", category)
+            .then(() => {
+                return selectReviews(sort_by, order, categoryQuery);
+            })
             .then((reviews) => {
                 res.status(200).send({ reviews });
             })

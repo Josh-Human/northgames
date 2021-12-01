@@ -275,12 +275,12 @@ describe.only("GET /api/reviews", () => {
                 expect(response.body.msg).toBe("Invalid order query");
             });
     });
-    xit("400: invalid category", () => {
+    it("404: invalid category", () => {
         return request(app)
             .get("/api/reviews?category=nothing")
-            .expect(400)
+            .expect(404)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid value");
+                expect(response.body.msg).toBe("Value does not exist.");
             });
     });
     xit("400: category with no reviews", () => {
