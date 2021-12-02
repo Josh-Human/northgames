@@ -150,7 +150,7 @@ describe("PATCH /api/reviews/:review_id", () => {
     });
 });
 
-describe.only("GET /api/reviews", () => {
+describe("GET /api/reviews", () => {
     it("200: returns review objects for reviewed game", () => {
         return request(app)
             .get("/api/reviews")

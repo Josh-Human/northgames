@@ -94,12 +94,11 @@ exports.postCommentByReviewId = (req, res, next) => {
         allowedKeys.includes(key)
     );
     if (!check) {
-        return throwBadRequest().catch(next);
-    } else {
-        insertCommentByReviewId(review_id, username, body)
-            .then((post) => {
-                res.status(200).send({ post });
-            })
-            .catch(next);
+        return throwBadRequest("Invalid body input.").catch(next);
     }
+    insertCommentByReviewId(review_id, username, body)
+        .then((post) => {
+            res.status(200).send({ post });
+        })
+        .catch(next);
 };
