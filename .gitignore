@@ -4,3 +4,6 @@ node_modules
 .~lock.tables.ods#
 log.txt
 db/test.sql
+error-handling.md
+finished_tasks.md
+hosting.md

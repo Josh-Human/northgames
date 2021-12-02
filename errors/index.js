@@ -28,5 +28,5 @@ exports.handleServerErrors = (err, req, res, next) => {
 };
 
 exports.handleContentError = (req, res, next) => {
-    res.status(404).send({ msg: "404 Not Found" });
+    res.status(404).send({ msg: "404 Not Found. Visit /api for use." });
 };

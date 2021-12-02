@@ -62,9 +62,9 @@ git push heroku main
 
 Go to the heroku site and log in.
 
-- Select your application
-- `Configure Add-ons`
-- Choose `Heroku Postgres`
+-   Select your application
+-   `Configure Add-ons`
+-   Choose `Heroku Postgres`
 
 The free tier will be adequate for our purposes. This will provide you with a `postgreSQL` pre-created database!
 
@@ -84,9 +84,9 @@ In your `package.json`, add the following keys to the scripts:
 
 ```json
 {
-  "scripts": {
-    "seed:prod": "NODE_ENV=production DATABASE_URL=$(heroku config:get DATABASE_URL) npm run seed"
-  }
+    "scripts": {
+        "seed:prod": "NODE_ENV=production DATABASE_URL=$(heroku config:get DATABASE_URL) npm run seed"
+    }
 }
 ```
 
@@ -95,31 +95,31 @@ This will establish an environment variable called `DATABASE_URL`, and set it to
 At the top of your `connection.js`, assign the value of the NODE_ENV to a variable (you may have already created this variable):
 
 ```js
-const ENV = process.env.NODE_ENV || 'development';
+const ENV = process.env.NODE_ENV || "development";
 ```
 
 It is important to check that we have either the development/test PGDATABASE variable or the production DATABASE_URL. If both are missing from the `process.env`, then throw an error.
 
 ```js
 if (!process.env.PGDATABASE && !process.env.DATABASE_URL) {
-  throw new Error('PGDATABASE or DATABASE_URL not set');
+    throw new Error("PGDATABASE or DATABASE_URL not set");
 }
 ```
 
 Next, add a `config` variable. If the `ENV` is production, this variable should hold a config object, containing the `DATABASE_URL` at the `connectionString` key, along with an additional `ssl.rejectUnauthorized` property set to false. This allows you to connect to the hosted database from your local machine.
 
 ```js
-const ENV = process.env.NODE_ENV || 'development';
+const ENV = process.env.NODE_ENV || "development";
 // ...
 const config =
-  ENV === 'production'
-    ? {
-        connectionString: process.env.DATABASE_URL,
-        ssl: {
-          rejectUnauthorized: false,
-        },
-      }
-    : {};
+    ENV === "production"
+        ? {
+              connectionString: process.env.DATABASE_URL,
+              ssl: {
+                  rejectUnauthorized: false,
+              },
+          }
+        : {};
 
 module.exports = new Pool(config);
 
