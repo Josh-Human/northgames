@@ -8,7 +8,8 @@ const {
 const {
     checkIfColumnExists,
     rejectForNoContent,
-    checkBodyKeys,
+    throwB,
+    throwBadRequest,
 } = require("../models/utils.model");
 
 exports.getReviewById = (req, res, next) => {
@@ -21,39 +22,40 @@ exports.getReviewById = (req, res, next) => {
         .catch(next);
 };
 
-// 400
 exports.patchReviewById = (req, res, next) => {
     const { review_id } = req.params;
-    const keys = Object.keys(req.body);
-    const key = keys[0];
-    if (
-        (keys.length !== 0 && key !== "inc_votes") ||
-        (typeof req.body[key] !== "number" && keys.length !== 0) ||
-        keys.length > 1
-    ) {
-        res.status(400).send({ msg: "Invalid input" });
-    } else {
-        const { inc_votes } = req.body;
-        updateReviewById(review_id, inc_votes)
-            .then((review) => {
-                if (review.length < 1) return rejectForNoContent();
-                res.status(200).send({ review });
-            })
-            .catch(next);
+    const { inc_votes } = req.body;
+
+    let allowedKeys = ["inc_votes"];
+    const check = Object.keys(req.body).every((key) =>
+        allowedKeys.includes(key)
+    );
+
+    if (!check || !inc_votes) {
+        return throwBadRequest("Invalid body.").catch(next);
     }
+
+    updateReviewById(review_id, inc_votes)
+        .then((review) => {
+            if (review.length < 1) return rejectForNoContent();
+            res.status(200).send({ review });
+        })
+        .catch(next);
 };
 
 // 400
 exports.getReviews = (req, res, next) => {
     let { sort_by, order, category } = req.query;
-    let noError = true;
-    let allowedKeys = ["sort_by", "order", "category"];
+    const allowedKeys = ["sort_by", "order", "category"];
+    const allowedDataType = { sort_by: "string" };
+
     let categoryQuery = undefined;
-    for (let key of Object.keys(req.query)) {
-        if (!allowedKeys.includes(key)) {
-            res.status(400).send({ msg: "Invalid query" });
-            noError = false;
-        }
+    const check = Object.keys(req.body).every((key) =>
+        allowedKeys.includes(key)
+    );
+
+    if (!check || typeof inc_votes !== "number") {
+        return throwBadRequest("Invalid body.").catch(next);
     }
 
     if (category) {
@@ -96,7 +98,7 @@ exports.postCommentByReviewId = (req, res, next) => {
         allowedKeys.includes(key)
     );
     if (!check) {
-        return checkBodyKeys().catch(next);
+        return throwBadRequest().catch(next);
     } else {
         insertCommentByReviewId(review_id, username, body)
             .then((post) => {

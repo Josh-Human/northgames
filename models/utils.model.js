@@ -7,6 +7,15 @@ exports.rejectForNoContent = () => {
         msg: "Value does not exist",
     });
 };
+
+exports.throwBadRequest = (msg) => {
+    return Promise.reject({ status: 400, msg: msg });
+};
+
+exports.checkBodyKeys = (allowedKeys, body) => {
+    return Object.keys(req.body).every((key) => allowedKeys.includes(key));
+};
+
 exports.checkIfColumnExists = (column, table, value) => {
     if (!value) {
         value = "dexterity";
@@ -18,8 +27,4 @@ exports.checkIfColumnExists = (column, table, value) => {
                 return exports.rejectForNoContent();
             }
         });
-};
-
-exports.checkBodyKeys = (allowedKeys, body) => {
-    return Promise.reject({ status: 400, msg: "Invalid body input." });
 };

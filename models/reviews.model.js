@@ -23,10 +23,6 @@ exports.selectReviewById = (review_id) => {
 };
 
 exports.updateReviewById = (review_id, inc_votes) => {
-    if (!inc_votes) {
-        return Promise.reject({ status: 400, msg: "Invalid body sent." });
-    }
-
     return db
         .query(
             `UPDATE reviews

@@ -69,7 +69,7 @@ describe("GET /api/reviews/:review_id", () => {
     });
 });
 
-describe("PATCH /api/reviews/:review_id", () => {
+describe.only("PATCH /api/reviews/:review_id", () => {
     it("200: returns review object for reviewed game", () => {
         return request(app)
             .patch("/api/reviews/2")
@@ -100,7 +100,7 @@ describe("PATCH /api/reviews/:review_id", () => {
             .send({ inc_votes: 5 })
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid input");
+                expect(response.body.msg).toBe("Invalid body.");
             });
     });
     it("404: returns no content when id out of range is sent", () => {
@@ -118,7 +118,7 @@ describe("PATCH /api/reviews/:review_id", () => {
             .send({})
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid body sent.");
+                expect(response.body.msg).toBe("Invalid body.");
             });
     });
     it("400: returns bad request when object with invalid key sent", () => {
@@ -127,7 +127,7 @@ describe("PATCH /api/reviews/:review_id", () => {
             .send({ a_value: 10 })
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid input");
+                expect(response.body.msg).toBe("Invalid body.");
             });
     });
     it("400: returns bad request when object with invalid value sent", () => {
@@ -136,7 +136,7 @@ describe("PATCH /api/reviews/:review_id", () => {
             .send({ inc_votes: "hello" })
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid input");
+                expect(response.body.msg).toBe("Invalid body.");
             });
     });
     it("400: returns bad request when object with correct and invalid key sent", () => {
@@ -145,7 +145,7 @@ describe("PATCH /api/reviews/:review_id", () => {
             .send({ inc_votes: 1, name: "Mitch" })
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid input");
+                expect(response.body.msg).toBe("Invalid body.");
             });
     });
 });
@@ -327,7 +327,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
     });
 });
 
-describe.only("POST /api/reviews/:review_id/comments", () => {
+describe("POST /api/reviews/:review_id/comments", () => {
     it("200: returns posted comment", () => {
         return request(app)
             .post("/api/reviews/2/comments")
