@@ -457,7 +457,7 @@ describe("GET /api", () => {
     });
 });
 
-describe.only("GET /api/users", () => {
+describe("GET /api/users", () => {
     test("200: returns array of user objects", () => {
         return request(app)
             .get("/api/users")
@@ -481,6 +481,23 @@ describe.only("GET /api/users", () => {
             .then((response) => {
                 expect(response.body.users[0]).toEqual({
                     username: "mallionaire",
+                });
+            });
+    });
+});
+
+describe.only("GET /api/users/:username", () => {
+    test("200: returns user object", () => {
+        return request(app)
+            .get("/api/users/mallionaire")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.user).toBeInstanceOf(Object);
+                expect(response.body.user).toEqual({
+                    username: "mallionaire",
+                    avatar_url:
+                        "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg",
+                    name: "haz",
                 });
             });
     });
