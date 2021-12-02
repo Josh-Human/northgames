@@ -501,4 +501,20 @@ describe.only("GET /api/users/:username", () => {
                 });
             });
     });
+    it("400: returns bad request when invalid param sent", () => {
+        return request(app)
+            .get("/api/users/10")
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid parameter.");
+            });
+    });
+    it("404: returns no content when id out of range is sent", () => {
+        return request(app)
+            .get("/api/users/dog")
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("Value does not exist");
+            });
+    });
 });
