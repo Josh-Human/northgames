@@ -49,13 +49,11 @@ exports.getReviews = (req, res, next) => {
     const allowedQuery = ["sort_by", "order", "category"];
     const allowedDataType = { sort_by: "string" };
     let categoryQuery = undefined;
-    const check = Object.keys(req.body).every((key) => {
-        console.log(key);
-        allowedKeys.includes(key);
+    const check = Object.keys(req.query).every((key) => {
+        return allowedQuery.includes(key);
     });
-
     if (!check) {
-        return throwBadRequest("Invalid body.").catch(next);
+        return throwBadRequest("Invalid query").catch(next);
     }
 
     if (category) {
