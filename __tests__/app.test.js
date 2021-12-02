@@ -474,4 +474,14 @@ describe.only("GET /api/users", () => {
                 });
             });
     });
+    test("200: returns correct objects", () => {
+        return request(app)
+            .get("/api/users")
+            .expect(200)
+            .then((response) => {
+                expect(response.body.users[0]).toEqual({
+                    username: "mallionaire",
+                });
+            });
+    });
 });
