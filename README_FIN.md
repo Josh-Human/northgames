@@ -4,8 +4,6 @@ A simple api [website](https://northgames-joshh.herokuapp.com/ "NorthGames a <> 
 
 ## Table of Contents
 
----
-
 -   [About](#About)
 -   [Technologies](#tech)
 -   [Setup](#setup)
@@ -13,20 +11,14 @@ A simple api [website](https://northgames-joshh.herokuapp.com/ "NorthGames a <> 
 
 ## **About**
 
----
-
 This browser application allows you to get information on games and the comments/reviews associated with them. Includes functionality for updating, creating and deleting posts.
 
 ## **Technologies**
-
----
 
 -   **Node v17.1.0**
 -   **Postgres 8.7.1**
 
 ## **Setup**
-
----
 
 To clone project locally:
 
@@ -65,7 +57,5 @@ To only test the main app endpoints use:
     npm test app
 
 ## **Status**
-
----
 
 **No known issues.**
