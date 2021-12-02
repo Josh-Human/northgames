@@ -46,15 +46,15 @@ exports.patchReviewById = (req, res, next) => {
 // 400
 exports.getReviews = (req, res, next) => {
     let { sort_by, order, category } = req.query;
-    const allowedKeys = ["sort_by", "order", "category"];
+    const allowedQuery = ["sort_by", "order", "category"];
     const allowedDataType = { sort_by: "string" };
-
     let categoryQuery = undefined;
-    const check = Object.keys(req.body).every((key) =>
-        allowedKeys.includes(key)
-    );
+    const check = Object.keys(req.body).every((key) => {
+        console.log(key);
+        allowedKeys.includes(key);
+    });
 
-    if (!check || typeof inc_votes !== "number") {
+    if (!check) {
         return throwBadRequest("Invalid body.").catch(next);
     }
 
@@ -62,18 +62,16 @@ exports.getReviews = (req, res, next) => {
         categoryQuery = `category='${category}'`;
         categoryQuery = categoryQuery.replace("'s", "''s");
     }
-    if (noError) {
-        checkIfColumnExists("slug", "categories", category)
-            .then(() => {
-                return selectReviews(sort_by, order, categoryQuery);
-            })
-            .then((reviews) => {
-                if (reviews.length < 1) return rejectForNoContent();
+    checkIfColumnExists("slug", "categories", category)
+        .then(() => {
+            return selectReviews(sort_by, order, categoryQuery);
+        })
+        .then((reviews) => {
+            if (reviews.length < 1) return rejectForNoContent();
 
-                res.status(200).send({ reviews });
-            })
-            .catch(next);
-    }
+            res.status(200).send({ reviews });
+        })
+        .catch(next);
 };
 
 exports.getCommentsByReviewId = (req, res, next) => {

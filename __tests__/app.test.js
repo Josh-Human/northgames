@@ -56,7 +56,7 @@ describe("GET /api/reviews/:review_id", () => {
             .get("/api/reviews/dog")
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid input");
+                expect(response.body.msg).toBe("Invalid body.");
             });
     });
     it("404: returns no content when id out of range is sent", () => {
@@ -69,7 +69,7 @@ describe("GET /api/reviews/:review_id", () => {
     });
 });
 
-describe.only("PATCH /api/reviews/:review_id", () => {
+describe("PATCH /api/reviews/:review_id", () => {
     it("200: returns review object for reviewed game", () => {
         return request(app)
             .patch("/api/reviews/2")
@@ -150,7 +150,7 @@ describe.only("PATCH /api/reviews/:review_id", () => {
     });
 });
 
-describe("GET /api/reviews", () => {
+describe.only("GET /api/reviews", () => {
     it("200: returns review objects for reviewed game", () => {
         return request(app)
             .get("/api/reviews")
@@ -314,7 +314,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
             .get("/api/reviews/dog/comments")
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid input");
+                expect(response.body.msg).toBe("Invalid body.");
             });
     });
     it("404: returns no content when id out of range is sent", () => {
@@ -407,7 +407,7 @@ describe("DELETE /api/comments/:comment_id", () => {
             .delete("/api/comments/dog")
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid input");
+                expect(response.body.msg).toBe("Invalid body.");
             });
     });
     it("404: returns no content when id out of range is sent", () => {
