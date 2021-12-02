@@ -27,7 +27,7 @@ exports.patchReviewById = (req, res, next) => {
     const { review_id } = req.params;
     const { inc_votes } = req.body;
 
-    let allowedKeys = ["inc_votes"];
+    const allowedKeys = ["inc_votes"];
 
     if (
         !checkDataValid(allowedKeys, req.body) ||
@@ -51,15 +51,15 @@ exports.getReviews = (req, res, next) => {
         return throwBadRequest("Invalid query").catch(next);
     }
     if (!category) {
-        selectReviews(sort_by, order, category) // categoryQuery
+        selectReviews(sort_by, order, category)
             .then((reviews) => {
                 if (reviews.length < 1) return rejectForNoContent();
-
                 res.status(200).send({ reviews });
             })
             .catch(next);
     } else {
         category = category.replace("'", "''");
+
         checkIfColumnExists("slug", "categories", category)
             .then(() => {
                 return selectReviews(sort_by, order, category); // categoryQuery
