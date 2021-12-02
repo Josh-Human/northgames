@@ -1,6 +1,6 @@
 # NorthGames - An api app
 
-A simple api [website](https://northgames-joshh.herokuapp.com/ "NorthGames a <> app.") to showcase backend development, using TDD techniques.
+A simple api [website](https://northgames-joshh.herokuapp.com/api "NorthGames a <> app.") to showcase backend development, using TDD techniques.
 
 ## Table of Contents
 
