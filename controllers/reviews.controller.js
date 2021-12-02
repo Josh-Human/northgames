@@ -10,6 +10,7 @@ const {
     rejectForNoContent,
     throwB,
     throwBadRequest,
+    checkDataValid,
 } = require("../models/utils.model");
 
 exports.getReviewById = (req, res, next) => {
@@ -27,11 +28,8 @@ exports.patchReviewById = (req, res, next) => {
     const { inc_votes } = req.body;
 
     let allowedKeys = ["inc_votes"];
-    const check = Object.keys(req.body).every((key) =>
-        allowedKeys.includes(key)
-    );
 
-    if (!check || !inc_votes) {
+    if (!checkDataValid(allowedKeys, req.body) || !inc_votes) {
         return throwBadRequest("Invalid body.").catch(next);
     }
 
@@ -43,7 +41,6 @@ exports.patchReviewById = (req, res, next) => {
         .catch(next);
 };
 
-// 400
 exports.getReviews = (req, res, next) => {
     let { sort_by, order, category } = req.query;
     const allowedQuery = ["sort_by", "order", "category"];
@@ -84,16 +81,13 @@ exports.getCommentsByReviewId = (req, res, next) => {
         .catch(next);
 };
 
-// 400
 exports.postCommentByReviewId = (req, res, next) => {
     const { review_id } = req.params;
     const { username, body } = req.body;
 
     let allowedKeys = ["username", "body"];
-    const check = Object.keys(req.body).every((key) =>
-        allowedKeys.includes(key)
-    );
-    if (!check) {
+
+    if (!checkDataValid(allowedKeys, req.body)) {
         return throwBadRequest("Invalid body input.").catch(next);
     }
     insertCommentByReviewId(review_id, username, body)

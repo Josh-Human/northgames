@@ -12,8 +12,8 @@ exports.throwBadRequest = (msg) => {
     return Promise.reject({ status: 400, msg: msg });
 };
 
-exports.checkBodyKeys = (allowedKeys, body) => {
-    return Object.keys(req.body).every((key) => allowedKeys.includes(key));
+exports.checkDataValid = (allowedValues, data) => {
+    return Object.keys(data).every((key) => allowedValues.includes(key));
 };
 
 exports.checkIfColumnExists = (column, table, value) => {
