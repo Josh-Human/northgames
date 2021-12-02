@@ -10,13 +10,14 @@ const app = express();
 
 app.use(express.json());
 
-// TODO: Error handling.
-
 app.use("/api", apiRouter);
 
+// Regular controller that handles errors
+app.all("/*", handleContentError);
+
+// Error handlers
 app.use(handleCustomErrors);
 app.use(handlePsqlErrors);
-app.all("/*", handleContentError);
 app.use(handleServerErrors);
 
 module.exports = app;
