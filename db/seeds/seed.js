@@ -1,9 +1,7 @@
 const db = require("../connection.js");
 const { dropTables, createTables, insertData } = require("./manage-tables.js");
 
-// TODO: Make drop async function.
-
-const seed = (data) => {
+const seed = (data, next) => {
     return dropTables()
         .then(() => {
             return createTables();
@@ -11,9 +9,7 @@ const seed = (data) => {
         .then(() => {
             return insertData(data);
         })
-        .catch((err) => {
-            console.log(err, "<<<<");
-        });
+        .catch(next);
 };
 
 module.exports = seed;

@@ -39,19 +39,19 @@ exports.updateReviewById = (review_id, inc_votes) => {
 exports.selectReviews = (
     sort_by = "created_at",
     order = "DESC",
-    category = "true"
+    category = "%"
 ) => {
     return db
         .query(
             format(
                 `SELECT reviews.review_id, title, review_body, designer, 
-            review_img_url, reviews.votes, category, owner, reviews.created_at,
-            COUNT(comments.comment_id) AS comment_count
-            FROM REVIEWS
-            FULL OUTER JOIN comments ON reviews.review_id = comments.review_id
-            WHERE %s
-            GROUP BY reviews.review_id
-            ORDER BY reviews.%I %s;`,
+                review_img_url, reviews.votes, category, owner, reviews.created_at,
+                COUNT(comments.comment_id) AS comment_count
+                FROM REVIEWS
+                FULL OUTER JOIN comments ON reviews.review_id = comments.review_id
+                WHERE category LIKE '%s'
+                GROUP BY reviews.review_id
+                ORDER BY reviews.%I %s;`,
                 category,
                 sort_by,
                 order.toUpperCase()

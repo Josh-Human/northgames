@@ -56,7 +56,7 @@ describe("GET /api/reviews/:review_id", () => {
             .get("/api/reviews/dog")
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid body.");
+                expect(response.body.msg).toBe("Invalid parameter.");
             });
     });
     it("404: returns no content when id out of range is sent", () => {
@@ -100,7 +100,7 @@ describe("PATCH /api/reviews/:review_id", () => {
             .send({ inc_votes: 5 })
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid body.");
+                expect(response.body.msg).toBe("Invalid parameter.");
             });
     });
     it("404: returns no content when id out of range is sent", () => {
@@ -314,7 +314,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
             .get("/api/reviews/dog/comments")
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid body.");
+                expect(response.body.msg).toBe("Invalid parameter.");
             });
     });
     it("404: returns no content when id out of range is sent", () => {
@@ -401,13 +401,12 @@ describe("DELETE /api/comments/:comment_id", () => {
     it("204: returns nothing on successful delete", () => {
         return request(app).delete("/api/comments/2").expect(204);
     });
-    //! running twice?
     it("400: returns bad request when invalid param sent", () => {
         return request(app)
             .delete("/api/comments/dog")
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid body.");
+                expect(response.body.msg).toBe("Invalid parameter.");
             });
     });
     it("404: returns no content when id out of range is sent", () => {

@@ -29,7 +29,10 @@ exports.patchReviewById = (req, res, next) => {
 
     let allowedKeys = ["inc_votes"];
 
-    if (!checkDataValid(allowedKeys, req.body) || !inc_votes) {
+    if (
+        !checkDataValid(allowedKeys, req.body) ||
+        typeof inc_votes !== "number"
+    ) {
         return throwBadRequest("Invalid body.").catch(next);
     }
 
@@ -44,29 +47,29 @@ exports.patchReviewById = (req, res, next) => {
 exports.getReviews = (req, res, next) => {
     let { sort_by, order, category } = req.query;
     const allowedQuery = ["sort_by", "order", "category"];
-    const allowedDataType = { sort_by: "string" };
-    let categoryQuery = undefined;
-    const check = Object.keys(req.query).every((key) => {
-        return allowedQuery.includes(key);
-    });
-    if (!check) {
+    if (!checkDataValid(allowedQuery, req.query)) {
         return throwBadRequest("Invalid query").catch(next);
     }
+    if (!category) {
+        selectReviews(sort_by, order, category) // categoryQuery
+            .then((reviews) => {
+                if (reviews.length < 1) return rejectForNoContent();
 
-    if (category) {
-        categoryQuery = `category='${category}'`;
-        categoryQuery = categoryQuery.replace("'s", "''s");
+                res.status(200).send({ reviews });
+            })
+            .catch(next);
+    } else {
+        category = category.replace("'", "''");
+        checkIfColumnExists("slug", "categories", category)
+            .then(() => {
+                return selectReviews(sort_by, order, category); // categoryQuery
+            })
+            .then((reviews) => {
+                if (reviews.length < 1) return rejectForNoContent();
+                res.status(200).send({ reviews });
+            })
+            .catch(next);
     }
-    checkIfColumnExists("slug", "categories", category)
-        .then(() => {
-            return selectReviews(sort_by, order, categoryQuery);
-        })
-        .then((reviews) => {
-            if (reviews.length < 1) return rejectForNoContent();
-
-            res.status(200).send({ reviews });
-        })
-        .catch(next);
 };
 
 exports.getCommentsByReviewId = (req, res, next) => {

@@ -17,11 +17,10 @@ exports.checkDataValid = (allowedValues, data) => {
 };
 
 exports.checkIfColumnExists = (column, table, value) => {
-    if (!value) {
-        value = "dexterity";
-    }
     return db
-        .query(format(`SELECT * FROM %I WHERE %I = $1`, table, column), [value])
+        .query(
+            format(`SELECT * FROM %I WHERE %I = '%s';`, table, column, value)
+        )
         .then(({ rows }) => {
             if (rows.length < 1) {
                 return exports.rejectForNoContent();
