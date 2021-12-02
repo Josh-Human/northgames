@@ -11,25 +11,30 @@ A simple api [website](https://northgames-joshh.herokuapp.com/ "NorthGames a <> 
 -   [Setup](#setup)
 -   [Status](#Status)
 
-### About
+## **About**
+
+---
 
 This browser application allows you to get information on games and the comments/reviews associated with them. Includes functionality for updating, creating and deleting posts.
 
-### Technologies
+## **Technologies**
+
+---
 
 -   **Node v17.1.0**
 -   **Postgres 8.7.1**
 
-### Setup
+## **Setup**
 
-To clone database:
+---
 
-<ol>
-    <li>Navigate to desired directory.
-    <li>Run code below in terminal.
-</ol>
+To clone project locally:
 
-    git clone https://github.com/Josh-Human/northgames.git
+1.  Navigate to desired directory.
+2.  Run code below in terminal.
+    </ol>
+
+        git clone https://github.com/Josh-Human/northgames.git
 
 To install dependencies, navigate inside northgames directory and run:
 
@@ -57,8 +62,10 @@ All Jest tests may be ran using:
 
 To only test the main app endpoints use:
 
-        npm test app
+    npm test app
 
-### Status
+## **Status**
+
+---
 
 **No known issues.**
