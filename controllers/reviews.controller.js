@@ -90,12 +90,17 @@ exports.postCommentByReviewId = (req, res, next) => {
     let allowedKeys = ["username", "body"];
 
     if (!checkDataValid(allowedKeys, req.body)) {
-        return rejectBadRequest("Invalid body input.").catch(next);
+        if (!username || !body) {
+            return rejectBadRequest("Invalid body input.").catch(next);
+        }
     }
     if (Object.keys(req.body).length < 2) {
         return rejectBadRequest("Additional keys needed.").catch(next);
     }
-    insertCommentByReviewId(review_id, username, body)
+    checkIfColumnExists("review_id", "reviews", review_id)
+        .then(() => {
+            return insertCommentByReviewId(review_id, username, body);
+        })
         .then((comment) => {
             res.status(201).send({ comment });
         })

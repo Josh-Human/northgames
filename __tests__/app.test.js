@@ -323,7 +323,7 @@ describe("GET /api/reviews/:review_id/comments", () => {
     });
 });
 
-describe.only("POST /api/reviews/:review_id/comments", () => {
+describe("POST /api/reviews/:review_id/comments", () => {
     it("201: returns posted comment", () => {
         return request(app)
             .post("/api/reviews/2/comments")
@@ -351,13 +351,22 @@ describe.only("POST /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Invalid body input.");
             });
     });
-    it("400: returns no content when id out of range is sent", () => {
+    it("400: returns bad request when invalid id sent", () => {
         return request(app)
-            .post("/api/reviews/2000/comments")
+            .post("/api/reviews/dog/comments")
             .send({ username: "bainesface", body: "A real life comment!" })
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Review does not exist.");
+                expect(response.body.msg).toBe("Invalid parameter.");
+            });
+    });
+    it("404: returns no content when id out of range is sent", () => {
+        return request(app)
+            .post("/api/reviews/2000/comments")
+            .send({ username: "bainesface", body: "A real life comment!" })
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("Value does not exist");
             });
     });
     it("400: bad request when empty object sent", () => {
@@ -378,16 +387,8 @@ describe.only("POST /api/reviews/:review_id/comments", () => {
                 expect(response.body.msg).toBe("Additional keys needed.");
             });
     });
-    it("400: returns bad request when object with invalid value sent", () => {
-        return request(app)
-            .post("/api/reviews/2/comments")
-            .send({ username: "bainesface", body: 65 })
-            .expect(400)
-            .then((response) => {
-                expect(response.body.msg).toBe("Invalid post body.");
-            });
-    });
-    it("400: returns bad request when object with correct and invalid key sent", () => {
+
+    it("201: ignores unnecessary properties", () => {
         return request(app)
             .post("/api/reviews/2/comments")
             .send({
@@ -395,9 +396,9 @@ describe.only("POST /api/reviews/:review_id/comments", () => {
                 body: "A real life comment!",
                 votes: 6,
             })
-            .expect(400)
+            .expect(201)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid body input.");
+                expect(response.body.comment).toEqual("A real life comment!");
             });
     });
 });
