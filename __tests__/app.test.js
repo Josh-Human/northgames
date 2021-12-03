@@ -464,7 +464,7 @@ describe("GET /api", () => {
 });
 
 describe("GET /api/users", () => {
-    test("200: returns array of user objects", () => {
+    it("200: returns array of user objects", () => {
         return request(app)
             .get("/api/users")
             .expect(200)
@@ -480,7 +480,7 @@ describe("GET /api/users", () => {
                 });
             });
     });
-    test("200: returns correct objects", () => {
+    it("200: returns correct objects", () => {
         return request(app)
             .get("/api/users")
             .expect(200)
@@ -493,7 +493,7 @@ describe("GET /api/users", () => {
 });
 
 describe("GET /api/users/:username", () => {
-    test("200: returns user object", () => {
+    it("200: returns user object", () => {
         return request(app)
             .get("/api/users/mallionaire")
             .expect(200)
@@ -521,6 +521,81 @@ describe("GET /api/users/:username", () => {
             .expect(404)
             .then((response) => {
                 expect(response.body.msg).toBe("Value does not exist");
+            });
+    });
+});
+
+describe.only("PATCH /api/comments/:comment_id", () => {
+    it("200: returns new votes for comment", () => {
+        return request(app)
+            .patch("/api/comments/1")
+            .send({ inc_votes: 5 })
+            .expect(200)
+            .then((response) => {
+                expect(response.body.comment).toBeInstanceOf(Object);
+                expect(Object.keys(response.body).length).toBe(1);
+                expect(response.body.comment).toEqual({
+                    comment_id: 1,
+                    body: "I loved this game too!",
+                    votes: 21,
+                    author: "bainesface",
+                    review_id: 2,
+                    created_at: new Date(1511354613389).toISOString(),
+                });
+            });
+    });
+    it.only("400: returns bad request when invalid param sent", () => {
+        return request(app)
+            .patch("/api/comments/dog")
+            .send({ inc_votes: 5 })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid parameter.");
+            });
+    });
+    it("404: returns no content when id out of range is sent", () => {
+        return request(app)
+            .patch("/api/comments/10000")
+            .send({ inc_votes: 5 })
+            .expect(404)
+            .then((response) => {
+                expect(response.body.msg).toBe("Value does not exist");
+            });
+    });
+    it("400: returns bad request when empty body sent", () => {
+        return request(app)
+            .patch("/api/comments/2")
+            .send({})
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid body.");
+            });
+    });
+    it("400: returns bad request when object with invalid key sent", () => {
+        return request(app)
+            .patch("/api/comments/2")
+            .send({ a_value: 10 })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid body.");
+            });
+    });
+    it("400: returns bad request when object with invalid value sent", () => {
+        return request(app)
+            .patch("/api/comments/2")
+            .send({ inc_votes: "hello" })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid body.");
+            });
+    });
+    it("400: returns bad request when object with correct and invalid key sent", () => {
+        return request(app)
+            .patch("/api/comments/2")
+            .send({ inc_votes: 1, name: "Mitch" })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Invalid body.");
             });
     });
 });

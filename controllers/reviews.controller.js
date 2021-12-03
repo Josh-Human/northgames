@@ -5,6 +5,7 @@ const {
     selectCommentsByReviewId,
     insertCommentByReviewId,
 } = require("../models/reviews.model");
+const { updateCommentById } = require("../models/users.models");
 const {
     checkIfColumnExists,
     rejectNoContent,
