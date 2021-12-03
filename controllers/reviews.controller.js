@@ -7,9 +7,9 @@ const {
 } = require("../models/reviews.model");
 const {
     checkIfColumnExists,
-    rejectForNoContent,
+    rejectNoContent,
     throwB,
-    throwBadRequest,
+    rejectBadRequest,
     checkDataValid,
 } = require("../models/utils.model");
 
@@ -17,7 +17,7 @@ exports.getReviewById = (req, res, next) => {
     const { review_id } = req.params;
     selectReviewById(review_id)
         .then((review) => {
-            if (review.length < 1) return rejectForNoContent();
+            if (review.length < 1) return rejectNoContent();
             res.status(200).send({ review });
         })
         .catch(next);
@@ -33,12 +33,12 @@ exports.patchReviewById = (req, res, next) => {
         !checkDataValid(allowedKeys, req.body) ||
         typeof inc_votes !== "number"
     ) {
-        return throwBadRequest("Invalid body.").catch(next);
+        return rejectBadRequest("Invalid body.").catch(next);
     }
 
     updateReviewById(review_id, inc_votes)
         .then((review) => {
-            if (review.length < 1) return rejectForNoContent();
+            if (review.length < 1) return rejectNoContent();
             res.status(200).send({ review });
         })
         .catch(next);
@@ -48,12 +48,12 @@ exports.getReviews = (req, res, next) => {
     let { sort_by, order, category } = req.query;
     const allowedQuery = ["sort_by", "order", "category"];
     if (!checkDataValid(allowedQuery, req.query)) {
-        return throwBadRequest("Invalid query").catch(next);
+        return rejectBadRequest("Invalid query").catch(next);
     }
     if (!category) {
         selectReviews(sort_by, order, category)
             .then((reviews) => {
-                if (reviews.length < 1) return rejectForNoContent();
+                if (reviews.length < 1) return rejectNoContent();
                 res.status(200).send({ reviews });
             })
             .catch(next);
@@ -65,7 +65,7 @@ exports.getReviews = (req, res, next) => {
                 return selectReviews(sort_by, order, category); // categoryQuery
             })
             .then((reviews) => {
-                if (reviews.length < 1) return rejectForNoContent();
+                if (reviews.length < 1) return rejectNoContent();
                 res.status(200).send({ reviews });
             })
             .catch(next);
@@ -91,7 +91,7 @@ exports.postCommentByReviewId = (req, res, next) => {
     let allowedKeys = ["username", "body"];
 
     if (!checkDataValid(allowedKeys, req.body)) {
-        return throwBadRequest("Invalid body input.").catch(next);
+        return rejectBadRequest("Invalid body input.").catch(next);
     }
     insertCommentByReviewId(review_id, username, body)
         .then((post) => {

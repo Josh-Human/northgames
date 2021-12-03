@@ -1,7 +1,7 @@
 const db = require("../db/connection.js");
 const reviewRouter = require("../routers/reviews.router.js");
 const format = require("pg-format");
-const { rejectForNoContent } = require("./utils.model.js");
+const { rejectNoContent } = require("./utils.model.js");
 // use count in select and join
 // use alias for lines 28-30 top rename the count to be comment_count
 

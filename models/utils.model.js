@@ -1,14 +1,14 @@
 const db = require("../db/connection.js");
 const format = require("pg-format");
 
-exports.rejectForNoContent = () => {
+exports.rejectNoContent = () => {
     return Promise.reject({
         status: 404,
         msg: "Value does not exist",
     });
 };
 
-exports.throwBadRequest = (msg) => {
+exports.rejectBadRequest = (msg) => {
     return Promise.reject({ status: 400, msg: msg });
 };
 
@@ -23,7 +23,7 @@ exports.checkIfColumnExists = (column, table, value) => {
         )
         .then(({ rows }) => {
             if (rows.length < 1) {
-                return exports.rejectForNoContent();
+                return exports.rejectNoContent();
             }
         });
 };
