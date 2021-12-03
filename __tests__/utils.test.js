@@ -116,7 +116,7 @@ describe("formatReviewData()", () => {
                 author: "Someone",
                 review_id: 1,
                 votes: 0,
-                created_at: new Date(10).toString(),
+                created_at: new Date(10).toISOString(),
                 body: "A body",
             },
         ];
@@ -133,7 +133,7 @@ describe("formatReviewData()", () => {
                 votes: 5,
                 category: 1,
                 owner: 3,
-                created_at: new Date(10).toString(),
+                created_at: new Date(10).toISOString(),
             },
         ];
         expect(formatReviewData(input)).toEqual([
@@ -200,7 +200,7 @@ describe("formatReviewData()", () => {
                 votes: 5,
                 category: 1,
                 owner: 3,
-                created_at: new Date(15).toString(),
+                created_at: new Date(15).toISOString(),
             },
             {
                 title: "Hello1",
@@ -210,7 +210,7 @@ describe("formatReviewData()", () => {
                 votes: 7,
                 category: 2,
                 owner: 4,
-                created_at: new Date(15).toString(),
+                created_at: new Date(15).toISOString(),
             },
         ];
         expect(formatReviewData(input)).toEqual([
@@ -245,7 +245,7 @@ describe("formatCommentData()", () => {
                 author: "Someone",
                 review_id: 1,
                 votes: 0,
-                created_at: new Date(10).toString(),
+                created_at: new Date(10).toISOString(),
                 body: "A body",
             },
         ];
@@ -258,7 +258,7 @@ describe("formatCommentData()", () => {
                 author: "Someone",
                 review_id: 1,
                 votes: 0,
-                created_at: new Date(10).toString(),
+                created_at: new Date(10).toISOString(),
                 body: "A body",
             },
         ];
@@ -278,7 +278,7 @@ describe("formatCommentData()", () => {
                 author: "Someone",
                 review_id: 1,
                 votes: 0,
-                created_at: new Date(10).toString(),
+                created_at: new Date(10).toISOString(),
                 body: "A body",
             },
         ];
@@ -287,7 +287,7 @@ describe("formatCommentData()", () => {
                 author: "Someone",
                 review_id: 1,
                 votes: 0,
-                created_at: new Date(10).toString(),
+                created_at: new Date(10).toISOString(),
                 body: "A body",
             },
         ]);
@@ -298,7 +298,7 @@ describe("formatCommentData()", () => {
                 author: "Someone",
                 review_id: 1,
                 votes: 0,
-                created_at: new Date(10).toString(),
+                created_at: new Date(10).toISOString(),
                 body: "A body",
             },
         ];
@@ -310,14 +310,14 @@ describe("formatCommentData()", () => {
                 author: "Someone",
                 review_id: 1,
                 votes: 0,
-                created_at: new Date(10).toString(),
+                created_at: new Date(10).toISOString(),
                 body: "A body",
             },
             {
                 author: "Someone1",
                 review_id: 2,
                 votes: 1,
-                created_at: new Date(10).toString(),
+                created_at: new Date(10).toISOString(),
                 body: "A body1",
             },
         ];
