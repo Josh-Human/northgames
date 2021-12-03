@@ -23,6 +23,6 @@ exports.updateCommentById = (comment_id, inc_votes) => {
             [inc_votes, comment_id]
         )
         .then(({ rows }) => {
-            return rows[0];
+            return rows;
         });
 };

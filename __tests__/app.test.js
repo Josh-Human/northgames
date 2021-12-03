@@ -525,8 +525,8 @@ describe("GET /api/users/:username", () => {
     });
 });
 
-describe.only("PATCH /api/comments/:comment_id", () => {
-    it("200: returns new votes for comment", () => {
+describe("PATCH /api/comments/:comment_id", () => {
+    it("200: returns new comment for comment", () => {
         return request(app)
             .patch("/api/comments/1")
             .send({ inc_votes: 5 })
@@ -544,7 +544,7 @@ describe.only("PATCH /api/comments/:comment_id", () => {
                 });
             });
     });
-    it.only("400: returns bad request when invalid param sent", () => {
+    it("400: returns bad request when invalid param sent", () => {
         return request(app)
             .patch("/api/comments/dog")
             .send({ inc_votes: 5 })
@@ -571,7 +571,7 @@ describe.only("PATCH /api/comments/:comment_id", () => {
                 expect(response.body.msg).toBe("Invalid body.");
             });
     });
-    it("400: returns bad request when object with invalid key sent", () => {
+    xit("400: returns bad request when object with invalid key sent", () => {
         return request(app)
             .patch("/api/comments/2")
             .send({ a_value: 10 })
@@ -580,7 +580,7 @@ describe.only("PATCH /api/comments/:comment_id", () => {
                 expect(response.body.msg).toBe("Invalid body.");
             });
     });
-    it("400: returns bad request when object with invalid value sent", () => {
+    xit("400: returns bad request when object with invalid value sent", () => {
         return request(app)
             .patch("/api/comments/2")
             .send({ inc_votes: "hello" })
@@ -589,7 +589,7 @@ describe.only("PATCH /api/comments/:comment_id", () => {
                 expect(response.body.msg).toBe("Invalid body.");
             });
     });
-    it("400: returns bad request when object with correct and invalid key sent", () => {
+    xit("400: returns bad request when object with correct and invalid key sent", () => {
         return request(app)
             .patch("/api/comments/2")
             .send({ inc_votes: 1, name: "Mitch" })

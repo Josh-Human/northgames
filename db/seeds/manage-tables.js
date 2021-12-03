@@ -43,7 +43,7 @@ exports.createTables = () => {
             review_body TEXT NOT NULL,
             designer VARCHAR(150) NOT NULL,
             review_img_url TEXT DEFAULT 'https://images.pexels.com/photos/163064/play-stone-network-networked-interactive-163064.jpeg',
-            votes INT DEFAULT 0,
+            votes INT DEFAULT 0 NOT NULL,
             category VARCHAR(150) REFERENCES categories(slug),
             owner VARCHAR(150) REFERENCES users(username),
             created_at TIMESTAMP NOT NULL
@@ -54,7 +54,7 @@ exports.createTables = () => {
             comment_id SERIAL PRIMARY KEY,
             author VARCHAR(150) REFERENCES users(username),
             review_id INT REFERENCES reviews(review_id) NOT NULL,
-            votes INT DEFAULT 0,
+            votes INT DEFAULT 0 NOT NULL,
             created_at TIMESTAMP NOT NULL,
             body TEXT NOT NULL
         );`);

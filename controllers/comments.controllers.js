@@ -2,7 +2,11 @@ const {
     deleteCommentsById,
     updateCommentById,
 } = require("../models/comments.models");
-const { rejectNoContent } = require("../models/utils.model");
+const {
+    rejectNoContent,
+    checkDataValid,
+    rejectBadRequest,
+} = require("../models/utils.model");
 
 exports.deleteCommentById = (req, res, next) => {
     const { comment_id } = req.params;
@@ -19,10 +23,14 @@ exports.deleteCommentById = (req, res, next) => {
 exports.patchCommentById = (req, res, next) => {
     const { comment_id } = req.params;
     const { inc_votes } = req.body;
-
+    const allowedKeys = ["inc_votes"];
+    if (!checkDataValid(allowedKeys, req.body)) {
+        return rejectBadRequest("Invalid body.").catch(next);
+    }
     updateCommentById(comment_id, inc_votes)
         .then((comment) => {
-            res.status(200).send({ comment });
+            if (comment.length < 1) return rejectNoContent();
+            res.status(200).send({ comment: comment[0] });
         })
         .catch(next);
 };
