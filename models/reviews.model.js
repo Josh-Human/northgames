@@ -12,7 +12,7 @@ exports.selectReviewById = (review_id) => {
             review_img_url, reviews.votes, category, owner, reviews.created_at,
             COUNT(comments.comment_id)::INT AS comment_count
             FROM REVIEWS
-            FULL OUTER JOIN comments ON reviews.review_id = comments.review_id
+            LEFT JOIN comments ON reviews.review_id = comments.review_id
             WHERE reviews.review_id = $1
             GROUP BY reviews.review_id;`,
             [review_id]
@@ -48,7 +48,7 @@ exports.selectReviews = (
                 review_img_url, reviews.votes, category, owner, reviews.created_at,
                 COUNT(comments.comment_id) AS comment_count
                 FROM REVIEWS
-                FULL OUTER JOIN comments ON reviews.review_id = comments.review_id
+                LEFT JOIN comments ON reviews.review_id = comments.review_id
                 WHERE category LIKE '%s'
                 GROUP BY reviews.review_id
                 ORDER BY reviews.%I %s;`,
