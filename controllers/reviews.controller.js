@@ -93,8 +93,8 @@ exports.postCommentByReviewId = (req, res, next) => {
         return rejectBadRequest("Invalid body input.").catch(next);
     }
     insertCommentByReviewId(review_id, username, body)
-        .then((post) => {
-            res.status(201).send({ post });
+        .then((comment) => {
+            res.status(201).send({ comment });
         })
         .catch(next);
 };

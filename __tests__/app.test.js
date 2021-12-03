@@ -330,7 +330,7 @@ describe.only("POST /api/reviews/:review_id/comments", () => {
             .send({ username: "bainesface", body: "A real life comment!" })
             .expect(201)
             .then((response) => {
-                expect(response.body.post).toEqual("A real life comment!");
+                expect(response.body.comment).toEqual("A real life comment!");
             });
     });
     it("401: user unknown when unregistered user", () => {
