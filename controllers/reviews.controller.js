@@ -92,6 +92,9 @@ exports.postCommentByReviewId = (req, res, next) => {
     if (!checkDataValid(allowedKeys, req.body)) {
         return rejectBadRequest("Invalid body input.").catch(next);
     }
+    if (Object.keys(req.body).length < 2) {
+        return rejectBadRequest("Additional keys needed.").catch(next);
+    }
     insertCommentByReviewId(review_id, username, body)
         .then((comment) => {
             res.status(201).send({ comment });

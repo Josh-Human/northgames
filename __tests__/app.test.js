@@ -366,7 +366,16 @@ describe.only("POST /api/reviews/:review_id/comments", () => {
             .send({})
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("No content sent.");
+                expect(response.body.msg).toBe("Additional keys needed.");
+            });
+    });
+    it("400: bad request when object with only one key sent", () => {
+        return request(app)
+            .post("/api/reviews/2/comments")
+            .send({ username: "bainesface" })
+            .expect(400)
+            .then((response) => {
+                expect(response.body.msg).toBe("Additional keys needed.");
             });
     });
     it("400: returns bad request when object with invalid value sent", () => {
