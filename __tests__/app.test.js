@@ -67,29 +67,27 @@ describe("GET /api/reviews/:review_id", () => {
     });
 });
 
-describe("PATCH /api/reviews/:review_id", () => {
+describe.only("PATCH /api/reviews/:review_id", () => {
     it("200: returns review object for reviewed game", () => {
         return request(app)
             .patch("/api/reviews/2")
             .send({ inc_votes: 5 })
             .expect(200)
             .then((response) => {
-                expect(response.body.review).toBeInstanceOf(Array);
-                expect(response.body.review.length).toBe(1);
-                expect(response.body.review).toEqual([
-                    {
-                        owner: "philippaclaire9",
-                        title: "Jenga",
-                        review_id: 2,
-                        review_body: "Fiddly fun for all the family",
-                        designer: "Leslie Scott",
-                        review_img_url:
-                            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-                        category: "dexterity",
-                        created_at: new Date(1610964101251).toISOString(),
-                        votes: 10,
-                    },
-                ]);
+                expect(response.body.review).toBeInstanceOf(Object);
+                expect(Object.keys(response.body).length).toBe(1);
+                expect(response.body.review).toEqual({
+                    owner: "philippaclaire9",
+                    title: "Jenga",
+                    review_id: 2,
+                    review_body: "Fiddly fun for all the family",
+                    designer: "Leslie Scott",
+                    review_img_url:
+                        "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+                    category: "dexterity",
+                    created_at: new Date(1610964101251).toISOString(),
+                    votes: 10,
+                });
             });
     });
     it("400: returns bad request when invalid param sent", () => {

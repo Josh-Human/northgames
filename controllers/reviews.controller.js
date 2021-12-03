@@ -39,7 +39,7 @@ exports.patchReviewById = (req, res, next) => {
     updateReviewById(review_id, inc_votes)
         .then((review) => {
             if (review.length < 1) return rejectNoContent();
-            res.status(200).send({ review });
+            res.status(200).send({ review: review[0] });
         })
         .catch(next);
 };
