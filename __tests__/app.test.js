@@ -32,23 +32,21 @@ describe("GET /api/reviews/:review_id", () => {
             .get("/api/reviews/2")
             .expect(200)
             .then((response) => {
-                expect(response.body.review).toBeInstanceOf(Array);
-                expect(response.body.review.length).toBe(1);
-                expect(response.body.review).toEqual([
-                    {
-                        owner: "philippaclaire9",
-                        title: "Jenga",
-                        review_id: 2,
-                        review_body: "Fiddly fun for all the family",
-                        designer: "Leslie Scott",
-                        review_img_url:
-                            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
-                        category: "dexterity",
-                        created_at: new Date(1610964101251).toISOString(),
-                        votes: 5,
-                        comment_count: 3,
-                    },
-                ]);
+                expect(response.body.review).toBeInstanceOf(Object);
+                expect(Object.keys(response.body).length).toBe(1);
+                expect(response.body.review).toEqual({
+                    owner: "philippaclaire9",
+                    title: "Jenga",
+                    review_id: 2,
+                    review_body: "Fiddly fun for all the family",
+                    designer: "Leslie Scott",
+                    review_img_url:
+                        "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
+                    category: "dexterity",
+                    created_at: new Date(1610964101251).toISOString(),
+                    votes: 5,
+                    comment_count: 3,
+                });
             });
     });
     it("400: returns bad request when invalid param sent", () => {
@@ -269,12 +267,12 @@ describe("GET /api/reviews", () => {
                 expect(response.body.msg).toBe("Value does not exist");
             });
     });
-    it("404: category with no reviews", () => {
+    it("200: category with no reviews", () => {
         return request(app)
             .get("/api/reviews?category=children's games")
-            .expect(404)
+            .expect(200)
             .then((response) => {
-                expect(response.body.msg).toBe("Value does not exist");
+                expect(response.body.reviews).toEqual([]);
             });
     });
 });
@@ -486,7 +484,7 @@ describe("GET /api/users", () => {
     });
 });
 
-describe.only("GET /api/users/:username", () => {
+describe("GET /api/users/:username", () => {
     test("200: returns user object", () => {
         return request(app)
             .get("/api/users/mallionaire")

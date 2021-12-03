@@ -18,7 +18,7 @@ exports.getReviewById = (req, res, next) => {
     selectReviewById(review_id)
         .then((review) => {
             if (review.length < 1) return rejectNoContent();
-            res.status(200).send({ review });
+            res.status(200).send({ review: review[0] });
         })
         .catch(next);
 };
@@ -62,10 +62,9 @@ exports.getReviews = (req, res, next) => {
 
         checkIfColumnExists("slug", "categories", category)
             .then(() => {
-                return selectReviews(sort_by, order, category); // categoryQuery
+                return selectReviews(sort_by, order, category);
             })
             .then((reviews) => {
-                if (reviews.length < 1) return rejectNoContent();
                 res.status(200).send({ reviews });
             })
             .catch(next);
