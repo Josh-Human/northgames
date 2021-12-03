@@ -571,7 +571,7 @@ describe("PATCH /api/comments/:comment_id", () => {
                 expect(response.body.msg).toBe("Invalid body.");
             });
     });
-    it.only("400: returns bad request when object with invalid key sent", () => {
+    it("400: returns bad request when object with invalid key sent", () => {
         return request(app)
             .patch("/api/comments/2")
             .send({ a_value: 10 })
@@ -580,16 +580,16 @@ describe("PATCH /api/comments/:comment_id", () => {
                 expect(response.body.msg).toBe("Invalid body.");
             });
     });
-    xit("400: returns bad request when object with invalid value sent", () => {
+    it("400: returns bad request when object with invalid value sent", () => {
         return request(app)
             .patch("/api/comments/2")
             .send({ inc_votes: "hello" })
             .expect(400)
             .then((response) => {
-                expect(response.body.msg).toBe("Invalid body.");
+                expect(response.body.msg).toBe("Invalid parameter.");
             });
     });
-    xit("400: returns bad request when object with correct and invalid key sent", () => {
+    it("400: returns bad request when object with correct and invalid key sent", () => {
         return request(app)
             .patch("/api/comments/2")
             .send({ inc_votes: 1, name: "Mitch" })
