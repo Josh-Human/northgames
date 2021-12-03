@@ -571,7 +571,7 @@ describe("PATCH /api/comments/:comment_id", () => {
                 expect(response.body.msg).toBe("Invalid body.");
             });
     });
-    xit("400: returns bad request when object with invalid key sent", () => {
+    it.only("400: returns bad request when object with invalid key sent", () => {
         return request(app)
             .patch("/api/comments/2")
             .send({ a_value: 10 })
