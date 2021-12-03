@@ -145,7 +145,7 @@ describe("formatReviewData()", () => {
                 5,
                 1,
                 3,
-                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
+                "1970-01-01T00:00:00.010Z",
             ],
         ]);
     });
@@ -222,7 +222,7 @@ describe("formatReviewData()", () => {
                 5,
                 1,
                 3,
-                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
+                "1970-01-01T00:00:00.010Z",
             ],
             [
                 "Hello1",
@@ -232,7 +232,7 @@ describe("formatReviewData()", () => {
                 7,
                 2,
                 4,
-                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
+                "1970-01-01T00:00:00.010Z",
             ],
         ]);
     });
@@ -263,13 +263,7 @@ describe("formatCommentData()", () => {
             },
         ];
         expect(formatCommentData(input)).toEqual([
-            [
-                "Someone",
-                1,
-                0,
-                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
-                "A body",
-            ],
+            ["Someone", 1, 0, "1970-01-01T00:00:00.010Z", "A body"],
         ]);
     });
     it("input is not mutated", () => {
@@ -322,20 +316,8 @@ describe("formatCommentData()", () => {
             },
         ];
         expect(formatCommentData(input)).toEqual([
-            [
-                "Someone",
-                1,
-                0,
-                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
-                "A body",
-            ],
-            [
-                "Someone1",
-                2,
-                1,
-                "Thu Jan 01 1970 01:00:00 GMT+0100 (Greenwich Mean Time)",
-                "A body1",
-            ],
+            ["Someone", 1, 0, "1970-01-01T00:00:00.010Z", "A body"],
+            ["Someone1", 2, 1, "1970-01-01T00:00:00.010Z", "A body1"],
         ]);
     });
 });
