@@ -67,7 +67,7 @@ describe("GET /api/reviews/:review_id", () => {
     });
 });
 
-describe.only("PATCH /api/reviews/:review_id", () => {
+describe("PATCH /api/reviews/:review_id", () => {
     it("200: returns review object for reviewed game", () => {
         return request(app)
             .patch("/api/reviews/2")
@@ -323,12 +323,12 @@ describe("GET /api/reviews/:review_id/comments", () => {
     });
 });
 
-describe("POST /api/reviews/:review_id/comments", () => {
-    it("200: returns posted comment", () => {
+describe.only("POST /api/reviews/:review_id/comments", () => {
+    it("201: returns posted comment", () => {
         return request(app)
             .post("/api/reviews/2/comments")
             .send({ username: "bainesface", body: "A real life comment!" })
-            .expect(200)
+            .expect(201)
             .then((response) => {
                 expect(response.body.post).toEqual("A real life comment!");
             });
