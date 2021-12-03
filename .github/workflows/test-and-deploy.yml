@@ -26,10 +26,7 @@ jobs:
               run: npm ci
 
             - name: Run utils tests
-              run: PGDATABASE=my_db PGUSER=test_user PGPASSWORD=test_password npm t utils
-
-            - name: Run utils tests
-              run: PGDATABASE=my_db PGUSER=test_user PGPASSWORD=test_password npm t app
+              run: PGDATABASE=my_db PGUSER=test_user PGPASSWORD=test_password npm t
 
     lint:
         name: Lint
