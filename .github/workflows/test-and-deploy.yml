@@ -30,30 +30,31 @@ jobs:
             - name: Run all tests
               run: PGDATABASE=my_db PGUSER=test_user PGPASSWORD=test_password npm t
 
-        lint:
-            name: Lint
-            runs-on: ubuntu-latest
-            steps:
-                - name: Checkout Repo
-                  uses: actions/checkout@v2
+    lint:
+        name: Lint
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v2
 
-                - name: Install Node.js dependencies
-                  run: npm ci
+            - name: Install Node.js dependencies
+              run: npm ci
 
-                - name: Run linters
-                  uses: wearerequired/lint-action@v1
-                  with:
-                      prettier: true
-        deploy:
-            runs-on: ubuntu-latest
-            needs: test
-            steps:
-                - name: Checkout Repo
-                  uses: actions/checkout@v2
+            - name: Run linters
+              uses: wearerequired/lint-action@v1
+              with:
+                  prettier: true
 
-                - name: Deploy to Heroku
-                  uses: AkhileshNS/heroku-deploy@v3.12.12
-                  with:
-                      heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-                      heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-                      heroku_email: ${{ secrets.HEROKU_EMAIL }}
+    deploy:
+        runs-on: ubuntu-latest
+        needs: test
+        steps:
+            - name: Checkout Repo
+              uses: actions/checkout@v2
+
+            - name: Deploy to Heroku
+              uses: AkhileshNS/heroku-deploy@v3.12.12
+              with:
+                  heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+                  heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+                  heroku_email: ${{ secrets.HEROKU_EMAIL }}
