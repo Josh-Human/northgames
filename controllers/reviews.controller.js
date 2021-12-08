@@ -46,8 +46,11 @@ exports.patchReviewById = (req, res, next) => {
 };
 
 exports.getReviews = (req, res, next) => {
-    let { sort_by, order, category } = req.query;
-    const allowedQuery = ["sort_by", "order", "category"];
+    let { sort_by, order, category, limit } = req.query;
+    const allowedQuery = ["sort_by", "order", "category", "limit"];
+    if (limit === undefined) {
+        limit = 10;
+    }
     if (!checkDataValid(allowedQuery, req.query)) {
         return rejectBadRequest("Invalid query").catch(next);
     }
@@ -55,6 +58,7 @@ exports.getReviews = (req, res, next) => {
         selectReviews(sort_by, order, category)
             .then((reviews) => {
                 if (reviews.length < 1) return rejectNoContent();
+                reviews = reviews.slice(0, limit);
                 res.status(200).send({ reviews });
             })
             .catch(next);
@@ -66,6 +70,7 @@ exports.getReviews = (req, res, next) => {
                 return selectReviews(sort_by, order, category);
             })
             .then((reviews) => {
+                reviews = reviews.slice(0, limit);
                 res.status(200).send({ reviews });
             })
             .catch(next);
